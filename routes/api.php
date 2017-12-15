@@ -14,5 +14,27 @@ use Illuminate\Http\Request;
 */
 
 
-Route::post('users/register', 'UserController@register');
 
+Route::group([
+    
+        'middleware' => 'api',
+        'prefix' => 'users'
+    
+    ], function ($router) {
+    
+        Route::get('/current', 'UserController@currentUser');
+        Route::post('/register', 'UserController@register');
+        Route::get('/', 'UserController@getUsers');
+        Route::post('/login', 'UserController@login');
+    });
+    
+
+    Route::group([
+        
+            'middleware' => 'api',
+            'prefix' => 'items'
+        
+        ], function ($router) {
+            Route::get('/', 'ItemsController@getAll');
+            
+        });

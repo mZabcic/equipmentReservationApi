@@ -23,7 +23,7 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('auth:api', ['except' => ['register', 'login']]);
     }
 
 
@@ -156,6 +156,92 @@ class UserController extends Controller
      ], 409);
      }
  }
+
+
+
+ /**
+     * Prijava
+     * @param string $email
+     * @param string $password
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Post(
+     *     path="/login",
+     *     description="Login",
+     *     operationId="api.login",
+     *     produces={"application/json"},
+     *     tags={"auth"},
+     *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="email",
+	 * 			in="body",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="Korisničko ime za prijavu u sustav",
+      *          @SWG\Schema(ref="#/definitions/String")
+	 * 		),
+     *     @SWG\Parameter(
+	 * 			name="password",
+	 * 			in="body",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="Lozinka",
+      *          @SWG\Schema(ref="#/definitions/String")
+	 * 		),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Login succesfull",
+     *       @SWG\Schema(ref="#/definitions/LoginResponse")
+     *        
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Unauthorized action.",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="User doesn't exist'",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+*
+      *   
+     * )
+     */
+    public function login(Request $request){
+        $data['email'] = $request->input('email');
+        $data['password'] = $request->input('password');
+         if ($data['email'] == null)
+       return response()->json([
+     'error' => 'Email is required'
+ ], 400);
+  if ($data['password'] == null)
+       return response()->json([
+     'error' => 'Password is required'
+ ], 400);
+ try {
+    $user = User::where('email', '=', $data['email'])->firstOrFail();
+    
+    } catch(NotFound $e) {
+        return response()->json(['error' => 'User does not exist'], 404);
+    }
+   
+    if (Hash::check($data['password'],  $user->password))
+{
+
+ $token = JWTAuth::fromUser($user);
+  return response()->json(['token' => $token, 'user' => $user], 200);
+}
+return response()->json(['error' => 'Wrong password'], 401);
+
+       }
+ 
+ 
      
     /**
      * Prikaži trenutnog korisnika
@@ -199,32 +285,8 @@ class UserController extends Controller
      * )
      */
     public function currentUser(){
-    try { 
-        try {
-            $token = JWTAuth::getToken();
-            $user = JWTAuth::authenticate($token);
-        } catch (TokenExpired $e) {
-            
-            $token = JWTAuth::refresh($token);
-            $user = JWTAuth::authenticate($token);
-        } catch (TokenInvalid $e) {
-            return response()->json(['token_invalid'], $e->getStatusCode());
-        } catch (TokenException $e) {
-            return response()->json(['token_absent'], $e->getStatusCode());
-    }  catch (TokenBlacklisted $e) {
-        return response()->json(['error' => 'Token on blacklist'], 401);
-    }
-      
-    $candidate = Kandidat::where('act_id', '=', $user->id)->firstOrFail();
-  
-    $datoteke = Datoteka::where('KDT_ID', '=', $candidate->id)->get();
-    } catch (NotFound $e) {
-            return response()->json(['error' => 'User not found'],404, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);
-    }
-  
-     unset($user['password']);
-
-    return response()->json(['account' => $user, 'candidate' => $candidate, 'files' => $datoteke ],200, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);
+        return response()->json($this->guard()->user());
+    
   
     }
 
@@ -304,7 +366,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      *
      * @SWG\Post(
-     *     path="/user/exist",
+     *     path="/users/exist",
      *     description="Check if user exists",
      *     operationId="api.users.exist",
      *     produces={"application/json"},
@@ -354,6 +416,41 @@ if ($check == 0) {
 
 }
 
+
+/**
+     * Dohvati listu svih korisnika
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Get(
+     *     path="/users",
+     *     description="Get list of all users",
+     *     operationId="api.users.all",
+     *     produces={"application/json"},
+     *     tags={"user.final"},
+     *     schemes={"http"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Vraca listu korisnika"
+     *     ),
+     *     @SWG\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+     * )
+     */
+    public function getUsers() {
+        
+ 
+    $users = User::all();
+    return response()->json($users, 200);
+    
+    }
+
+    public function guard()
+    {
+        return Auth::guard();
+    }
 
    
 
