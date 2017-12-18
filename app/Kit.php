@@ -8,7 +8,7 @@ class Kit extends Model
 {
 
 
-    protected $table = 'device_types';
+    protected $table = 'kits';
     /**
      * The attributes that are mass assignable.
      *

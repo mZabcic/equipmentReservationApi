@@ -17,7 +17,7 @@ class CreateItemsTable extends Migration
             $table->increments('id');
             $table->string('identifier');
             $table->string('description');
-            $table->binary('picture');
+            $table->binary('picture')->nullable();
             $table->integer('kit_id')->references('id')->on('kits');
             $table->integer('type_id')->references('id')->on('types');
             $table->integer('subtype_id')->references('id')->on('subtypes');
