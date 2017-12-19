@@ -18,10 +18,10 @@ class CreateItemsTable extends Migration
             $table->string('identifier');
             $table->string('description');
             $table->binary('picture')->nullable();
-            $table->integer('kit_id')->references('id')->on('kits');
-            $table->integer('type_id')->references('id')->on('types');
-            $table->integer('subtype_id')->references('id')->on('subtypes');
-            $table->integer('device_type_id')->references('id')->on('device_types');
+            $table->integer('kit_id')->nullable();
+            $table->integer('type_id')->nullable();
+            $table->integer('subtype_id')->nullable();
+            $table->integer('device_type_id')->nullable();
             $table->timestamps();
         });
     }

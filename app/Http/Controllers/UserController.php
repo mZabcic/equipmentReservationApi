@@ -18,6 +18,30 @@ use Hash;
 use Carbon\Carbon;
 
 
+/**
+ * @SWG\Swagger(
+ *     schemes={"http","https"},
+ *     host="localhost",
+ *     basePath="/api",
+ *     @SWG\Info(
+ *         version="1.0.0",
+ *         title="Kontrola korisnika",
+ *         description="API za login, registraciju i upravljanje korisnicima",
+ *         termsOfService="",
+ *         @SWG\Contact(
+ *             email="mislav.zabcic@gmail.com"
+ *         ),
+ *         @SWG\License(
+ *             name="MIT",
+ *             url="https://opensource.org/licenses/MIT"
+ *         )
+ *     ),
+ *     @SWG\ExternalDocumentation(
+ *         description="Git wiki",
+ *         url="https://github.com/mZabcic/equipmentReservationApi"
+ *     )
+ * )
+ */
 
 class UserController extends Controller
 {
@@ -28,74 +52,52 @@ class UserController extends Controller
      * Registracija
      * @param string $email
      * @param string $password
-     * @param file $cv
-     * @param string $name
-     * @param string $surname
+     * @param string $first_name
+     * @param string $last_name
      * @return \Illuminate\Http\JsonResponse
      *
      * @SWG\Post(
-     *     path="/register",
-     *     description="Creates a user",
-     *     operationId="api.users.create",
+     *     path="auth/register",
+     *     description="Registracija",
+     *     operationId="api.auth.register",
      *     produces={"application/json"},
      *     tags={"auth"},
      *     schemes={"http"},
      *     @SWG\Parameter(
 	 * 			name="email",
-	 * 		in="body",
+	 * 		    in="body",
 	 * 			required=true,
 	 * 			type="string",
-	 * 			description="Username",
-      *          @SWG\Schema(ref="#/definitions/String")
+	 * 			description="Email adresa",
+     * @SWG\Schema(type="string")
 	 * 		),
      *    @SWG\Parameter(
 	 * 			name="password",
 	 * 			in="body",
 	 * 			required=true,
 	 * 			type="string",
-	 * 			description="Password",
-     *          @SWG\Schema(ref="#/definitions/String")
-	 * 		),
-     *     @SWG\Parameter(
-	 * 			name="cv",
-	 * 			in="body",
-	 * 			required=false,
-	 * 			type="file",
-	 * 			description="CV",
-      *          @SWG\Schema(ref="#/definitions/String")
+	 * 			description="Lozinka",
+     * @SWG\Schema(type="string")
 	 * 		),
      *    @SWG\Parameter(
-	 * 			name="name",
+	 * 			name="first_name",
 	 * 			in="body",
 	 * 			required=true,
 	 * 			type="string",
-	 * 			description="First name",
-      *          @SWG\Schema(ref="#/definitions/String")
+	 * 			description="Ime",
+     * @SWG\Schema(type="string")
 	 * 		),
      *    @SWG\Parameter(
-	 * 			name="surname",
+	 * 			name="last_name",
 	 * 			in="body",
 	 * 			required=true,
 	 * 			type="string",
-	 * 			description="Last name",
-      *          @SWG\Schema(ref="#/definitions/String")
-	 * 		),
-     *    @SWG\Parameter(
-	 * 			name="cv",
-	 * 			in="body",
-	 * 			required=false,
-	 * 			type="File",
-	 * 			description="Last name",
-      *          @SWG\Schema(ref="#/definitions/File")
+	 * 			description="Prezime",
+     *           @SWG\Schema(type="string")
 	 * 		),
      *     @SWG\Response(
      *         response=200,
      *         description="User created"
-     *     ),
-     *     @SWG\Response(
-     *         response=401,
-     *         description="Unauthorized action.",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
      *     ),
      *     @SWG\Response(
      *         response=409,
@@ -104,7 +106,7 @@ class UserController extends Controller
      *     ),
      *     @SWG\Response(
      *         response=400,
-     *         description="Invalid data",
+     *         description="Invalid form data",
      *         @SWG\Schema(ref="#/definitions/CustomError")
      *     )
      * )
@@ -156,16 +158,16 @@ class UserController extends Controller
 
 
 
- /**
+/**
      * Prijava
      * @param string $email
      * @param string $password
      * @return \Illuminate\Http\JsonResponse
      *
      * @SWG\Post(
-     *     path="/login",
-     *     description="Login",
-     *     operationId="api.login",
+     *     path="auth/login",
+     *     description="Prijava",
+     *     operationId="api.auth.login",
      *     produces={"application/json"},
      *     tags={"auth"},
      *     schemes={"http"},
@@ -175,7 +177,7 @@ class UserController extends Controller
 	 * 			required=true,
 	 * 			type="string",
 	 * 			description="Korisničko ime za prijavu u sustav",
-      *          @SWG\Schema(ref="#/definitions/String")
+      *         @SWG\Schema(type="string")
 	 * 		),
      *     @SWG\Parameter(
 	 * 			name="password",
@@ -183,7 +185,7 @@ class UserController extends Controller
 	 * 			required=true,
 	 * 			type="string",
 	 * 			description="Lozinka",
-      *          @SWG\Schema(ref="#/definitions/String")
+      *          @SWG\Schema(type="string")
 	 * 		),
      *     @SWG\Response(
      *         response=200,
@@ -193,12 +195,12 @@ class UserController extends Controller
      *     ),
      *     @SWG\Response(
      *         response=401,
-     *         description="Unauthorized action.",
+     *         description="Invalid password",
      *         @SWG\Schema(ref="#/definitions/CustomError")
      *     ),
      *     @SWG\Response(
      *         response=400,
-     *         description="Invalid data",
+     *         description="Invalid form data",
      *         @SWG\Schema(ref="#/definitions/CustomError")
      *     ),
      *     @SWG\Response(
@@ -210,6 +212,7 @@ class UserController extends Controller
       *   
      * )
      */
+
     public function login(Request $request){
         $data['email'] = $request->input('email');
         $data['password'] = $request->input('password');
@@ -245,11 +248,11 @@ return response()->json(['error' => 'Wrong password'], 401);
      * @return \Illuminate\Http\JsonResponse
      *
      * @SWG\Get(
-     *     path="/user",
-     *     description="Dohvati trenutnog korisnika",
-     *     operationId="api.user",
+     *     path="users/current",
+     *     description="Prikaži koji si korisnik",
+     *     operationId="api.users.current",
      *     produces={"application/json"},
-     *     tags={"user.final"},
+     *     tags={"users"},
      *     schemes={"http"},
      *     @SWG\Parameter(
 	 * 			name="authorization",
@@ -257,12 +260,12 @@ return response()->json(['error' => 'Wrong password'], 401);
 	 * 			required=true,
 	 * 			type="string",
 	 * 			description="JWT token",
-      *          @SWG\Schema(ref="#/definitions/String")
+      *          @SWG\Schema(type="string")
 	 * 		),
      *     @SWG\Response(
      *         response=200,
-     *         description="User recevied",
-     *         @SWG\Schema(ref="#/definitions/CurrentUser")
+     *         description="Current user object",
+     *         @SWG\Schema(ref="#/definitions/User")
      *     ),
      *     @SWG\Response(
      *         response=404,
@@ -270,14 +273,24 @@ return response()->json(['error' => 'Wrong password'], 401);
      *         @SWG\Schema(ref="#/definitions/CustomError")
      *     ),
      *     @SWG\Response(
-     *         response=400,
+     *         response=401,
      *         description="Token invalid",
      *         @SWG\Schema(ref="#/definitions/CustomError")
      *     ),
      *     @SWG\Response(
-     *         response=505,
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=500,
      *         description="Server error",
      *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
      *     )
      * )
      */
@@ -291,85 +304,50 @@ return response()->json(['error' => 'Wrong password'], 401);
 
 
 
-
-
 /**
-     * Provjeri da li korisnik postoji
-     * @param string $email
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @SWG\Post(
-     *     path="/users/exist",
-     *     description="Check if user exists",
-     *     operationId="api.users.exist",
-     *     produces={"application/json"},
-     *     tags={"user.final"},
-     *     schemes={"http"},
-     *     @SWG\Parameter(
-	 * 			name="email",
-	 * 		in="body",
-	 * 			required=true,
-	 * 			type="string",
-	 * 			description="Korisničko ime",
-      *          @SWG\Schema(ref="#/definitions/String")
-	 * 		),
-     *     @SWG\Response(
-     *         response=200,
-     *         description="Korisnik postoji"
-     *     ),
-     *     @SWG\Response(
-     *         response=404,
-     *         description="User does not exist",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     ),
-     *     @SWG\Response(
-     *         response=400,
-     *         description="Invalid data",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     )
-     * )
-     */
-public function exist(Request $request) {
-    $data['email'] = $request->input('email');
- 
-if ($data['email'] == null)
- return response()->json([
-'error' => 'Email is required'
-], 400);
-
-$check = User::where('email',$data['email'])->count();
-if ($check == 0) {
-    return response()->json([
-        'error' => 'User does not exist'
-        ], 400);
-} else {
-    return response()->json([
-        ], 200);
-}
-
-}
-
-
-/**
-     * Dohvati listu svih korisnika
+     * Dohvati korisnika, ili korisnike prema parametrima
+     * @param number $id
      * @return \Illuminate\Http\JsonResponse
      *
      * @SWG\Get(
-     *     path="/users",
-     *     description="Get list of all users",
-     *     operationId="api.users.all",
+     *     path="users",
+     *     description="Dohvati sve korisnike ili filtrirane",
+     *     operationId="api.users",
      *     produces={"application/json"},
-     *     tags={"user.final"},
+     *     tags={"users"},
      *     schemes={"http"},
      *     @SWG\Response(
      *         response=200,
-     *         description="Vraca listu korisnika"
+     *         description="Korisnici" ,
+     *   @SWG\Schema(ref="#/definitions/User")  
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=501,
+     *         description="Invalid search data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
      *     ),
      *     @SWG\Response(
-     *         response=500,
-     *         description="Server error",
+     *         response=401,
+     *         description="Token invalid",
      *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
      *     )
+*
+      *   
      * )
      */
     public function getUsers(Request $request) {
@@ -377,7 +355,11 @@ if ($check == 0) {
             try {
                $key = key($request->query());
                $value = $request->query($key);
+               if ($key != 'id') {
                $users = User::where($key, 'like', '%' . $value . '%')->get();
+               } else {
+                $users = User::where($key, '=', $value )->get();
+               }
                return response()->json( $users, 200);
             } catch (Illuminate\Database\QueryException $e) {
                 return response()->json(['error'=>'Invalid serach data'], 501);
@@ -389,26 +371,60 @@ if ($check == 0) {
     
     }
 
+
     /**
-     * Dohvati listu svih korisnika
+     * Obriši korisnika
+     * @param number $id
      * @return \Illuminate\Http\JsonResponse
      *
-     * @SWG\Get(
-     *     path="/users",
-     *     description="Get list of all users",
-     *     operationId="api.users.all",
+     * @SWG\Delete(
+     *     path="admin/users/delete/{id}",
+     *     description="Obriši natječaj sa danim ID-om",
+     *     operationId="api.admin.users.delete",
      *     produces={"application/json"},
-     *     tags={"user.final"},
+     *     tags={"admin"},
      *     schemes={"http"},
      *     @SWG\Response(
      *         response=200,
-     *         description="Vraca listu korisnika"
+     *         description="Traženi natječaj"   
      *     ),
      *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
      *         response=500,
-     *         description="Server error",
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="No admin rights",
      *         @SWG\Schema(ref="#/definitions/CustomError")
      *     )
+*
+      *   
      * )
      */
     public function delete($id) {
@@ -423,68 +439,7 @@ if ($check == 0) {
     }
 
 
-    /**
-     * Uredi korisnika
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @SWG\Put(
-     *     path="/user/update",
-     *     description="Uredi korisnika",
-     *     operationId="api.user.edit",
-     *     produces={"application/json"},
-     *     tags={"user"},
-     *     schemes={"http"},
-     *     @SWG\Parameter(
-	 * 			name="authorization",
-	 * 		    in="header",
-	 * 			required=true,
-	 * 			type="string",
-	 * 			description="JWT token",
-      *          @SWG\Schema(ref="#/definitions/String")
-	 * 		),
-        *     @SWG\Parameter(
-	 * 			name="account",
-	 * 		    in="body",
-	 * 			required=false,
-	 * 			type="object",
-	 * 			description="Account object",
-      *          @SWG\Schema(ref="#/definitions/User")
-	 * 		),
-        *     @SWG\Parameter(
-	 * 			name="candidate",
-	 * 		    in="body",
-	 * 			required=false,
-	 * 			type="object",
-	 * 			description="Kandidat object",
-      *          @SWG\Schema(ref="#/definitions/KNDKandidati")
-	 * 		),
-     *     @SWG\Response(
-     *         response=200,
-     *         description="Token",
-     *        @SWG\Schema(ref="#/definitions/LoginResponse")
-     *     ),
-     *     @SWG\Response(
-     *         response=404,
-     *         description="No data found",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     ),
-     *     @SWG\Response(
-     *         response=400,
-     *         description="Token absent",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     ),
-      *     @SWG\Response(
-     *         response=401,
-     *         description="Token invalid",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     ),
-    *     @SWG\Response(
-     *         response=505,
-     *         description="Server error",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     )
-     * )
-     */
+   
    public function edit(Request $request) {
     $currentUser = JWTAuth::parseToken()->authenticate();
     $account = User::hydrate([json_decode($request->input('user'))]);
@@ -512,28 +467,7 @@ if ($check == 0) {
 
 
 
-/**
-     * Dohvati listu svih korisnika
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @SWG\Get(
-     *     path="/users",
-     *     description="Get list of all users",
-     *     operationId="api.users.all",
-     *     produces={"application/json"},
-     *     tags={"user.final"},
-     *     schemes={"http"},
-     *     @SWG\Response(
-     *         response=200,
-     *         description="Vraca listu korisnika"
-     *     ),
-     *     @SWG\Response(
-     *         response=500,
-     *         description="Server error",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     )
-     * )
-     */
+
     public function user($id) {
         
  try {

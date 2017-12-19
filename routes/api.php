@@ -70,7 +70,7 @@ Route::group([
             
             ], function ($router) {
                 Route::post('/create', 'ItemsController@create');
-                
+                Route::post('/create/file', 'ItemsController@createFromFile');
 });
 Route::group([
     'prefix' => 'users'

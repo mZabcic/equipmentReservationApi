@@ -1,0 +1,425 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Kontrola korisnika",
+        "description": "API za login, registraciju i upravljanje korisnicima",
+        "termsOfService": "",
+        "contact": {
+            "email": "mislav.zabcic@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "host": "localhost",
+    "basePath": "/api",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "paths": {
+        "auth/register": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Registracija",
+                "description": "Registracija",
+                "operationId": "api.auth.register",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "body",
+                        "description": "Email adresa",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "description": "Lozinka",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "first_name",
+                        "in": "body",
+                        "description": "Ime",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "last_name",
+                        "in": "body",
+                        "description": "Prezime",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User created"
+                    },
+                    "409": {
+                        "description": "User exists",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid form data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "auth/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Prijava",
+                "description": "Prijava",
+                "operationId": "api.auth.login",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "body",
+                        "description": "Korisni\u010dko ime za prijavu u sustav",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "description": "Lozinka",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login succesfull",
+                        "schema": {
+                            "$ref": "#/definitions/LoginResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid password",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid form data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "404": {
+                        "description": "User doesn't exist'",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "users/current": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Prika\u017ei trenutnog korisnika",
+                "description": "Prika\u017ei koji si korisnik",
+                "operationId": "api.users.current",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Current user object",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "users": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Dohvati korisnika, ili korisnike prema parametrima",
+                "description": "Dohvati sve korisnike ili filtrirane",
+                "operationId": "api.users",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Korisnici",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "501": {
+                        "description": "Invalid search data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/users/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Obri\u0161i korisnika",
+                "description": "Obri\u0161i natje\u010daj sa danim ID-om",
+                "operationId": "api.admin.users.delete",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tra\u017eeni natje\u010daj"
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "CustomError": {
+            "properties": {
+                "error": {
+                    "description": "",
+                    "type": "string",
+                    "format": "string"
+                }
+            },
+            "type": "object"
+        },
+        "LoginResponse": {
+            "properties": {
+                "token": {
+                    "description": "",
+                    "type": "string",
+                    "format": "string"
+                },
+                "user": {
+                    "description": "",
+                    "format": "User",
+                    "$ref": "#/definitions/User"
+                }
+            },
+            "type": "object"
+        },
+        "TokenExpired": {
+            "properties": {
+                "token": {
+                    "description": "",
+                    "type": "string",
+                    "format": "string"
+                },
+                "error": {
+                    "description": "",
+                    "type": "string",
+                    "format": "string"
+                }
+            },
+            "type": "object"
+        },
+        "User": {
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int"
+                },
+                "first_name": {
+                    "type": "integer",
+                    "format": "string"
+                },
+                "last_name": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "email": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "role_id": {
+                    "type": "integer",
+                    "format": "int"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "externalDocs": {
+        "description": "Git wiki",
+        "url": "https://github.com/mZabcic/equipmentReservationApi"
+    }
+}

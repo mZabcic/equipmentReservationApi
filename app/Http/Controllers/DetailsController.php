@@ -28,28 +28,7 @@ class DetailsController extends Controller
 
 
 
-/**
-     * Dohvati listu svih details tablica itema
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @SWG\Get(
-     *     path="/items",
-     *     description="Dohvati listu svih details tablica itema",
-     *     operationId="api.items.details.all",
-     *     produces={"application/json"},
-     *     tags={"items.details"},
-     *     schemes={"http"},
-     *     @SWG\Response(
-     *         response=200,
-     *         description="Vraca liste svih detalja"
-     *     ),
-     *     @SWG\Response(
-     *         response=500,
-     *         description="Server error",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     )
-     * )
-     */
+
     public function getAll() {
         $deviceType = DeviceType::all();
         $kit = Kit::all();
@@ -59,28 +38,7 @@ class DetailsController extends Controller
     
     }
 
-    /**
-     * Dohvati listu svih device types
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @SWG\Get(
-     *     path="/items",
-     *     description="Dohvati listu svih device types",
-     *     operationId="api.items.details.device_types",
-     *     produces={"application/json"},
-     *     tags={"items.details"},
-     *     schemes={"http"},
-     *     @SWG\Response(
-     *         response=200,
-     *         description="Vraca listu svih device type"
-     *     ),
-     *     @SWG\Response(
-     *         response=500,
-     *         description="Server error",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     )
-     * )
-     */
+
     public function getDeviceTypes(Request $request) {
         if (count($request->query()) == 1) {
          try {   $key = key($request->query());
@@ -96,28 +54,7 @@ class DetailsController extends Controller
     
     }
 
-    /**
-     * Dohvati listu svih details tablica itema
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @SWG\Get(
-     *     path="/items",
-     *     description="Dohvati listu svih details tablica itema",
-     *     operationId="api.items.details.all",
-     *     produces={"application/json"},
-     *     tags={"items.details"},
-     *     schemes={"http"},
-     *     @SWG\Response(
-     *         response=200,
-     *         description="Vraca liste svih detalja"
-     *     ),
-     *     @SWG\Response(
-     *         response=500,
-     *         description="Server error",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     )
-     * )
-     */
+ 
     public function getKits(Request $request) {
 
         if (count($request->query()) == 1) {
@@ -137,35 +74,14 @@ class DetailsController extends Controller
     
     }
 
-    /**
-     * Dohvati listu svih details tablica itema
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @SWG\Get(
-     *     path="/items",
-     *     description="Dohvati listu svih details tablica itema",
-     *     operationId="api.items.details.all",
-     *     produces={"application/json"},
-     *     tags={"items.details"},
-     *     schemes={"http"},
-     *     @SWG\Response(
-     *         response=200,
-     *         description="Vraca liste svih detalja"
-     *     ),
-     *     @SWG\Response(
-     *         response=500,
-     *         description="Server error",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     )
-     * )
-     */
+  
     public function getSubtypes(Request $request) {
         if (count($request->query()) == 1) {
           try {
                 $key = key($request->query());
             $value = $request->query($key);
             $subtype = Subtype::where($key, 'like', '%' . $value . '%')->get();
-            return response()->json($subType, 200);
+            return response()->json($subtype, 200);
         } catch (\Illuminate\Database\QueryException $e) {
             return response()->json(['error'=>'Invalid serach data'], 501);
         }
@@ -175,28 +91,7 @@ class DetailsController extends Controller
     
     }
 
-    /**
-     * Dohvati listu svih details tablica itema
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @SWG\Get(
-     *     path="/items",
-     *     description="Dohvati listu svih details tablica itema",
-     *     operationId="api.items.details.all",
-     *     produces={"application/json"},
-     *     tags={"items.details"},
-     *     schemes={"http"},
-     *     @SWG\Response(
-     *         response=200,
-     *         description="Vraca liste svih detalja"
-     *     ),
-     *     @SWG\Response(
-     *         response=500,
-     *         description="Server error",
-     *         @SWG\Schema(ref="#/definitions/CustomError")
-     *     )
-     * )
-     */
+
     public function getTypes(Request $request) {
         if (count($request->query()) == 1) {
         try {

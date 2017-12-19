@@ -6,6 +6,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+/**
+ * @SWG\Definition(type="object")
+ */
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
@@ -49,4 +52,45 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+
+
+    /**
+     * @SWG\Property(format="int")
+     * @var int
+     */
+   private $id;
+   /**
+   * @SWG\Property(format="string")
+   * @var int
+   */
+ private $first_name;
+  /**
+   * @SWG\Property(format="string")
+   * @var string
+   */
+  private $last_name;
+  /**
+   * @SWG\Property(format="string")
+   * @var string
+   */
+  private $email;
+ /**
+     * @SWG\Property(format="int")
+     * @var int
+     */
+    private $role_id;
+
+      /**
+   * @SWG\Property(format="date")
+   * @var date
+   */
+  private $created_at;
+
+        /**
+   * @SWG\Property(format="date")
+   * @var date
+   */
+      private $updated_at;
+
 }
