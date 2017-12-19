@@ -316,10 +316,19 @@ return response()->json(['error' => 'Wrong password'], 401);
      *     produces={"application/json"},
      *     tags={"users"},
      *     schemes={"http"},
+     *       @SWG\Parameter(
+     *         name="filter",
+     *         in="query",
+     *         description="Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretraživanje>",
+     *         required=true,
+     *         type="string",
+     *         @SWG\Items(type="string")
+     *     ),
      *     @SWG\Response(
      *         response=200,
      *         description="Korisnici" ,
-     *   @SWG\Schema(ref="#/definitions/User")  
+     *       
+     *   @SWG\Schema(type="array", @SWG\Items(ref="#/definitions/User"))  
      *     ),
      *    @SWG\Response(
      *         response=500,
@@ -386,7 +395,7 @@ return response()->json(['error' => 'Wrong password'], 401);
      *     schemes={"http"},
      *     @SWG\Response(
      *         response=200,
-     *         description="Traženi natječaj"   
+     *         description="Korisnik je obrisan"   
      *     ),
      *     @SWG\Response(
      *         response=404,
@@ -439,7 +448,66 @@ return response()->json(['error' => 'Wrong password'], 401);
     }
 
 
-   
+
+   /**
+     * Uredi korisnika
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Put(
+     *     path="users/edit",
+     *     description="Uredi svoj profil",
+     *     operationId="api.users.edit",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+        *     @SWG\Parameter(
+	 * 			name="account",
+	 * 		    in="body",
+	 * 			required=false,
+	 * 			type="object",
+	 * 			description="Objekt tipa user, sa poljima koja se mijenjaju",
+      *          @SWG\Schema(ref="#/definitions/User")
+	 * 		),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Token and user",
+     *        @SWG\Schema(ref="#/definitions/LoginResponse")
+     *     ),
+     *     @SWG\Response(
+     *         response=409,
+     *         description="User with that e-mail address already exists",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *       @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+     * )
+     */
    public function edit(Request $request) {
     $currentUser = JWTAuth::parseToken()->authenticate();
     $account = User::hydrate([json_decode($request->input('user'))]);
@@ -459,7 +527,7 @@ return response()->json(['error' => 'Wrong password'], 401);
    
     } catch (Exception $e) {
         dd($e);
-         return response()->json(['error' => 'Server error' ],505, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);
+         return response()->json(['error' => 'Server error' ],500, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);
     }
     $token = JWTAuth::fromUser($acc);
     return response()->json(['token' => $token, 'user' => $acc ],200, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);    
@@ -467,7 +535,51 @@ return response()->json(['error' => 'Wrong password'], 401);
 
 
 
-
+    /**
+     * Dohvati korisnika prema ID-u
+     * @param number $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Get(
+     *     path="users/{id}",
+     *     description="Dohvati korisnika prema ID-u",
+     *     operationId="api.users.id",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     schemes={"http"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Traženi korisnik"   
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     )
+*
+      *   
+     * )
+     */
     public function user($id) {
         
  try {

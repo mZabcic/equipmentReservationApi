@@ -236,11 +236,26 @@
                 "produces": [
                     "application/json"
                 ],
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretra\u017eivanje>",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Korisnici",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
                         }
                     },
                     "500": {
@@ -292,7 +307,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Tra\u017eeni natje\u010daj"
+                        "description": "Korisnik je obrisan"
                     },
                     "404": {
                         "description": "No data found",
@@ -334,6 +349,133 @@
                         "description": "No admin rights",
                         "schema": {
                             "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "users/edit": {
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Uredi korisnika",
+                "description": "Uredi svoj profil",
+                "operationId": "api.users.edit",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "account",
+                        "in": "body",
+                        "description": "Objekt tipa user, sa poljima koja se mijenjaju",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        },
+                        "type": "object"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token and user",
+                        "schema": {
+                            "$ref": "#/definitions/LoginResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "User with that e-mail address already exists",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "users/{id}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Dohvati korisnika prema ID-u",
+                "description": "Dohvati korisnika prema ID-u",
+                "operationId": "api.users.id",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tra\u017eeni korisnik"
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
                         }
                     }
                 },
