@@ -33,6 +33,7 @@ Route::group([
         Route::get('/', 'UserController@getUsers');
         Route::get('/{id}', 'UserController@user');
         Route::put('/edit', 'UserController@edit');
+        Route::delete('/delete', 'UserController@deleteMe');
     });
     
 
@@ -71,13 +72,15 @@ Route::group([
             ], function ($router) {
                 Route::post('/create', 'ItemsController@create');
                 Route::post('/create/file', 'ItemsController@createFromFile');
+                Route::put('/edit', 'ItemsController@edit');
+                Route::delete('/delete/{id}', 'ItemsController@delete');
 });
 Route::group([
     'prefix' => 'users'
 
 ], function ($router) {
     Route::delete('/delete/{id}', 'UserController@delete');
-    
+    Route::put('/edit', 'UserController@editAdmin');
 });
         
 });

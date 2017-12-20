@@ -3,7 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+/**
+ * @SWG\Definition(type="object")
+ */
 class Item extends Model
 {
 
@@ -39,8 +41,90 @@ class Item extends Model
     }
 
 
+      /**
+     * @SWG\Property(format="int")
+     * @var int
+     */
+   private $id;
+   /**
+   * @SWG\Property(format="string")
+   * @var int
+   */
+ private $identifier;
+  /**
+   * @SWG\Property(format="string")
+   * @var string
+   */
+  private $description;
+  /**
+   * @SWG\Property(format="string")
+   * @var string
+   */
+  private $picture;
+ /**
+     * @SWG\Property(format="int")
+     * @var int
+     */
+    private $kit_id;
+    /**
+     * @SWG\Property(format="int")
+     * @var int
+     */
+    private $type_id;
 
+    /**
+     * @SWG\Property(format="int")
+     * @var int
+     */
+    private $subtype_id;
 
+    /**
+     * @SWG\Property(format="int")
+     * @var int
+     */
+    private $device_type_id;
+     /**
+     * @SWG\Property(format="file")
+     * @var file
+     */
+    private $file;
+    
+
+      /**
+   * @SWG\Property(format="date")
+   * @var date
+   */
+  private $created_at;
+
+        /**
+   * @SWG\Property(format="date")
+   * @var date
+   */
+      private $updated_at;
+
+ /**
+     * @SWG\Property(format="Kit")
+     * @var Kit
+     */
+    private $kit;
+    /**
+     * @SWG\Property(format="Type")
+     * @var Type
+     */
+    private $type;
+
+    /**
+     * @SWG\Property(format="Subtype")
+     * @var Subtype
+     */
+    private $subtype;
+
+    /**
+     * @SWG\Property(format="DeviceType")
+     * @var DeviceType
+     */
+    private $device_type;
+    
 
  
 }

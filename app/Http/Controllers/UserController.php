@@ -25,7 +25,7 @@ use Carbon\Carbon;
  *     basePath="/api",
  *     @SWG\Info(
  *         version="1.0.0",
- *         title="Kontrola korisnika",
+ *         title="Rezervacija resursa",
  *         description="API za login, registraciju i upravljanje korisnicima",
  *         termsOfService="",
  *         @SWG\Contact(
@@ -212,7 +212,6 @@ class UserController extends Controller
       *   
      * )
      */
-
     public function login(Request $request){
         $data['email'] = $request->input('email');
         $data['password'] = $request->input('password');
@@ -305,7 +304,7 @@ return response()->json(['error' => 'Wrong password'], 401);
 
 
 /**
-     * Dohvati korisnika, ili korisnike prema parametrima
+     * Dohvati korisnika ili korisnike prema parametrima
      * @param number $id
      * @return \Illuminate\Http\JsonResponse
      *
@@ -388,11 +387,19 @@ return response()->json(['error' => 'Wrong password'], 401);
      *
      * @SWG\Delete(
      *     path="admin/users/delete/{id}",
-     *     description="Obriši natječaj sa danim ID-om",
+     *     description="Obriši korisnika sa danim ID-om",
      *     operationId="api.admin.users.delete",
      *     produces={"application/json"},
      *     tags={"admin"},
      *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
      *     @SWG\Response(
      *         response=200,
      *         description="Korisnik je obrisan"   
@@ -448,6 +455,78 @@ return response()->json(['error' => 'Wrong password'], 401);
     }
 
 
+    
+    /**
+     * Obriši sebe
+     * @param number $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Delete(
+     *     path="/users/delete",
+     *     description="Obriši svoj korisnički račun",
+     *     operationId="api.users.delete",
+     *     produces={"application/json"},
+     *     tags={"users"},
+     *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Korisnik je obrisan"   
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     )
+*
+      *   
+     * )
+     */
+    public function deleteMe() {
+        $me = $this->guard()->user();
+        try {
+        $user = User::where('id', '=', $me->id)->firstOrFail();
+    } catch (NotFound $e) {
+        return response()->json(['error' => 'No user found'], 404);
+    }
+        $user->delete();
+    return response()->json();
+    
+    }
+
+
 
    /**
      * Uredi korisnika
@@ -469,7 +548,7 @@ return response()->json(['error' => 'Wrong password'], 401);
       *         @SWG\Items(type="string")
 	 * 		),
         *     @SWG\Parameter(
-	 * 			name="account",
+	 * 			name="user",
 	 * 		    in="body",
 	 * 			required=false,
 	 * 			type="object",
@@ -526,7 +605,6 @@ return response()->json(['error' => 'Wrong password'], 401);
     $acc->save();
    
     } catch (Exception $e) {
-        dd($e);
          return response()->json(['error' => 'Server error' ],500, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);
     }
     $token = JWTAuth::fromUser($acc);
@@ -591,6 +669,113 @@ return response()->json(['error' => 'Wrong password'], 401);
 
     
     }
+
+
+      /**
+     * Uredi korisnika kao administrator
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Put(
+     *     path="admin/users/edit",
+     *     description="Uredi korisnika kao administrator",
+     *     operationId="api.admin.users.edit",
+     *     produces={"application/json"},
+     *     tags={"admin"},
+     *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+        *     @SWG\Parameter(
+	 * 			name="user",
+	 * 		    in="body",
+	 * 			required=false,
+	 * 			type="object",
+	 * 			description="Objekt tipa user, sa poljima koja se mijenjaju",
+      *          @SWG\Schema(ref="#/definitions/User")
+	 * 		),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Edited user",
+     *        @SWG\Schema(ref="#/definitions/User")
+     *     ),
+     *     @SWG\Response(
+     *         response=409,
+     *         description="User with that e-mail address already exists",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *       @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="No admin rights",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid form data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+     * )
+     */
+   public function editAdmin(Request $request) {
+    if ($request->input('user') == null)
+    return response()->json([
+  'error' => 'User is required'
+], 400);
+    $user = User::hydrate([json_decode($request->input('user'))]);
+    try {
+      $user_id = $user[0]->id;
+    } catch (Exception $e) {
+      return response()->json([
+        'error' => 'User object must contain ID of an object you want to edit'
+    ], 400);
+    }
+    
+    try {
+        $check = User::where('email', $item[0]->email )->count();
+        if ($check > 0) {
+          return response()->json([
+       'error' => 'User with that email already exists'
+   ], 409);
+   }
+        } catch (Exception $e) {
+  
+        }
+    
+    $acc = User::where("id", "=", $user[0]->id)->first();
+    $acc->first_name = $user[0]->first_name != null ? $user[0]->first_name : $acc->first_name;
+    $acc->last_name = $user[0]->last_name!= null ? $user[0]->last_name : $acc->last_name;
+    $acc->email = $user[0]->email != null ? $user[0]->email : $acc->email;
+    $acc->role_id = $user[0]->role_id != null ? $user[0]->role_id : $acc->role_id;
+    $acc->updated_at = Carbon::now();
+    $acc->save();
+   
+    
+    return response()->json($acc,200, ['Content-type'=> 'application/json; charset=utf-8'], JSON_UNESCAPED_UNICODE);    
+}
 
 
 
