@@ -48,7 +48,7 @@ class Item extends Model
    private $id;
    /**
    * @SWG\Property(format="string")
-   * @var int
+   * @var string
    */
  private $identifier;
   /**

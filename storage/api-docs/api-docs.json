@@ -20,6 +20,1090 @@
         "https"
     ],
     "paths": {
+        "items/details": {
+            "get": {
+                "tags": [
+                    "details"
+                ],
+                "summary": "Dohvati sve detalje itema",
+                "description": "Dohvati sve detalje itema",
+                "operationId": "api.items.details",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretra\u017eivanje>",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalji itema",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/DetailsResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "501": {
+                        "description": "Invalid search data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "items/details/devicetypes": {
+            "get": {
+                "tags": [
+                    "details"
+                ],
+                "summary": "Dohvati sve tipove ure\u0111aja ili filtrirane",
+                "description": "Dohvati sve tipove ure\u0111aja ili filtrirane",
+                "operationId": "api.items.details.devicetypes",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretra\u017eivanje>",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Device types",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/DeviceType"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "501": {
+                        "description": "Invalid search data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "items/details/kits": {
+            "get": {
+                "tags": [
+                    "details"
+                ],
+                "summary": "Dohvati sve kitove ili filtrirane",
+                "description": "Dohvati sve kitove ili filtrirane",
+                "operationId": "api.items.details.kits",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretra\u017eivanje>",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Kits",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Kit"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "501": {
+                        "description": "Invalid search data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "items/details/subtypes": {
+            "get": {
+                "tags": [
+                    "details"
+                ],
+                "summary": "Dohvati sve podtipove ure\u0111aja ili filtrirane",
+                "description": "Dohvati sve podtipove ure\u0111aja ili filtrirane",
+                "operationId": "api.items.details.subtypes",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretra\u017eivanje>",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Subtypes",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SubType"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "501": {
+                        "description": "Invalid search data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "items/details/types": {
+            "get": {
+                "tags": [
+                    "details"
+                ],
+                "summary": "Dohvati sve tipove ili filtrirane",
+                "description": "Dohvati sve tipove ili filtrirane",
+                "operationId": "api.items.details.types",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretra\u017eivanje>",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Types",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Type"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "501": {
+                        "description": "Invalid search data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "reservations/details": {
+            "get": {
+                "tags": [
+                    "details"
+                ],
+                "summary": "Dohvati sve statuse rezervacija ili filtrirane",
+                "description": "Dohvati sve statuse rezervacija ili filtrirane",
+                "operationId": "api.reservations.details.statuses",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretra\u017eivanje>",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reservation statusi",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/ReservationStatus"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "501": {
+                        "description": "Invalid search data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/items/details/devicetypes/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Obri\u0161i tip ure\u0111aja",
+                "description": "Obri\u0161i tip ured\u0111aja sa danim ID-om",
+                "operationId": "api.admin.items.details.devicetypes.delete",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tip ure\u0111aja je obrisan"
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/items/details/subtypes/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Obri\u0161i podtip",
+                "description": "Obri\u0161i podtip sa danim ID-om",
+                "operationId": "api.admin.items.details.subtypes.delete",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Podtip je obrisan"
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/items/details/types/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Obri\u0161i tip",
+                "description": "Obri\u0161i tip sa danim ID-om",
+                "operationId": "api.admin.items.details.types.delete",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tip je obrisan"
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/items/details/kits/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Obri\u0161i kit",
+                "description": "Obri\u0161i kit sa danim ID-om",
+                "operationId": "api.admin.items.details.kits.delete",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Kit je obrisan"
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/items/details/create/devicetype": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Kreiranje device tipa",
+                "description": "Kreiranje device tipa",
+                "operationId": "api.admin.items.details.create.devicetype",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "label",
+                        "in": "body",
+                        "description": "Labela",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "description",
+                        "in": "body",
+                        "description": "Opis",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Device type created"
+                    },
+                    "409": {
+                        "description": "Item with that label already exists",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid form data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/items/details/create/type": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Kreiranje  tipa",
+                "description": "Kreiranje tipa",
+                "operationId": "api.admin.items.details.create.type",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "label",
+                        "in": "body",
+                        "description": "Labela",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "description",
+                        "in": "body",
+                        "description": "Opis",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Type created"
+                    },
+                    "409": {
+                        "description": "Item with that label already exists",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid form data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/items/details/create/subtype": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Kreiranje  podtipa",
+                "description": "Kreiranje podtipa",
+                "operationId": "api.admin.items.details.create.subtype",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "label",
+                        "in": "body",
+                        "description": "Labela",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "description",
+                        "in": "body",
+                        "description": "Opis",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Subtype created"
+                    },
+                    "409": {
+                        "description": "Item with that label already exists",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid form data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/items/details/create/kit": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Kreiranje  kita",
+                "description": "Kreiranje kita",
+                "operationId": "api.admin.items.details.create.kit",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "body",
+                        "description": "Labela",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Kit created"
+                    },
+                    "409": {
+                        "description": "Item with that label already exists",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid form data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
         "items": {
             "get": {
                 "tags": [
@@ -1109,6 +2193,39 @@
             },
             "type": "object"
         },
+        "DetailsResponse": {
+            "properties": {
+                "kits": {
+                    "description": "",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Kit"
+                    }
+                },
+                "types": {
+                    "description": "",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Type"
+                    }
+                },
+                "subtypes": {
+                    "description": "",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SubType"
+                    }
+                },
+                "device_types": {
+                    "description": "",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DeviceType"
+                    }
+                }
+            },
+            "type": "object"
+        },
         "DeviceType": {
             "properties": {
                 "id": {
@@ -1148,7 +2265,7 @@
                 },
                 "identifier": {
                     "description": "",
-                    "type": "integer",
+                    "type": "string",
                     "format": "string"
                 },
                 "description": {
@@ -1254,6 +2371,133 @@
                     "description": "",
                     "format": "User",
                     "$ref": "#/definitions/User"
+                }
+            },
+            "type": "object"
+        },
+        "Reservation": {
+            "properties": {
+                "id": {
+                    "description": "",
+                    "type": "integer",
+                    "format": "int"
+                },
+                "user_id": {
+                    "description": "",
+                    "type": "integer",
+                    "format": "string"
+                },
+                "return_date": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
+                },
+                "returned_date": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
+                },
+                "remark": {
+                    "description": "",
+                    "type": "string",
+                    "format": "string"
+                },
+                "status_id": {
+                    "description": "",
+                    "type": "integer",
+                    "format": "int"
+                },
+                "created_at": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
+                },
+                "updated_at": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
+                },
+                "status": {
+                    "description": "",
+                    "format": "ReservationStatus",
+                    "$ref": "#/definitions/ReservationStatus"
+                },
+                "items": {
+                    "description": "",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Item"
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "ReservationItem": {
+            "properties": {
+                "id": {
+                    "description": "",
+                    "type": "integer",
+                    "format": "int"
+                },
+                "reservation_id": {
+                    "description": "",
+                    "type": "integer",
+                    "format": "int"
+                },
+                "item_id": {
+                    "description": "",
+                    "type": "integer",
+                    "format": "int"
+                },
+                "created_at": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
+                },
+                "updated_at": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
+                },
+                "reservatin": {
+                    "description": "",
+                    "format": "Reservation",
+                    "$ref": "#/definitions/Reservation"
+                },
+                "item": {
+                    "description": "",
+                    "format": "Item",
+                    "$ref": "#/definitions/Item"
+                }
+            },
+            "type": "object"
+        },
+        "ReservationStatus": {
+            "properties": {
+                "id": {
+                    "description": "",
+                    "type": "integer",
+                    "format": "int"
+                },
+                "name": {
+                    "description": "",
+                    "type": "string",
+                    "format": "string"
+                },
+                "description": {
+                    "description": "",
+                    "type": "string",
+                    "format": "string"
+                },
+                "created_at": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
+                },
+                "updated_at": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
                 }
             },
             "type": "object"

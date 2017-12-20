@@ -74,6 +74,21 @@ Route::group([
                 Route::post('/create/file', 'ItemsController@createFromFile');
                 Route::put('/edit', 'ItemsController@edit');
                 Route::delete('/delete/{id}', 'ItemsController@delete');
+
+                Route::group([
+                    'prefix' => 'details'
+                
+                ], function ($router) {
+                    Route::delete('devicetypes/delete/{id}', 'DetailsController@deleteDeviceType');
+                    Route::delete('types/delete/{id}', 'DetailsController@deleteType');
+                    Route::delete('subtypes/delete/{id}', 'DetailsController@deleteSubtype');
+                    Route::delete('kits/delete/{id}', 'DetailsController@deleteKit');
+                    Route::post('devicetypes/create', 'DetailsController@createDeviceType');
+                    Route::post('types/create', 'DetailsController@createType');
+                    Route::post('subtypes/create', 'DetailsController@createSubType');
+                    Route::post('kits/create', 'DetailsController@createKit');
+                });
+                        
 });
 Route::group([
     'prefix' => 'users'
@@ -84,5 +99,25 @@ Route::group([
 });
         
 });
+
+
+
+Route::group([
+    
+        'middleware' => 'jwt',
+        'prefix' => 'reservations'
+    
+    ], function ($router) {
+        Route::group([
+            
+                'middleware' => 'jwt',
+                'prefix' => 'details'
+            
+            ], function ($router) {
+                Route::get('/', 'DetailsController@getStatuses');
+             
+            });
+    });
+    
 
 
