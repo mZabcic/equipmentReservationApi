@@ -1548,6 +1548,153 @@
                 ]
             }
         },
+        "reservations/request": {
+            "post": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Zatra\u017ei opremu",
+                "description": "Zatra\u017ei opremu",
+                "operationId": "api.reservations.request",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "start_date",
+                        "in": "body",
+                        "description": "Datum po\u010detka posudbe",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "return_date",
+                        "in": "body",
+                        "description": "Datum vra\u0107anja opreme, null ukoliko ne zna\u0161 kolko ti treba",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "item_id",
+                        "in": "body",
+                        "description": "Ime",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "remark",
+                        "in": "body",
+                        "description": "Napomena uz posudbu",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Request made"
+                    },
+                    "409": {
+                        "description": "User exists",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid form data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "reservations": {
+            "get": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Dohvati sve rezervacije",
+                "description": "Dohvati sve items ili filtrirane",
+                "operationId": "api.reservations",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretra\u017eivanje>",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Items",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Item"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "501": {
+                        "description": "Invalid search data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
         "auth/register": {
             "post": {
                 "tags": [
@@ -2386,6 +2533,11 @@
                     "description": "",
                     "type": "integer",
                     "format": "string"
+                },
+                "start_date": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
                 },
                 "return_date": {
                     "description": "",

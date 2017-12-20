@@ -108,6 +108,9 @@ Route::group([
         'prefix' => 'reservations'
     
     ], function ($router) {
+        Route::get('/', 'ReservationsController@all');
+        Route::post('/request', 'ReservationsController@reservationRequest');
+
         Route::group([
             
                 'middleware' => 'jwt',

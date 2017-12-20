@@ -17,7 +17,7 @@ class Reservation extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'return_date', 'returned_date', 'remark', 'status_id'
+        'user_id', 'return_date', 'returned_date', 'remark', 'status_id', 'start_date'
     ];
 
     public function user()
@@ -27,7 +27,7 @@ class Reservation extends Model
 
     public function items()
     {
-      return $this->hasMany('App\ReservationItem', 'user_id');
+      return $this->hasMany('App\ReservationItem', 'reservation_id');
     }
 
     
@@ -43,6 +43,11 @@ class Reservation extends Model
    * @var int
    */
  private $user_id;
+  /**
+   * @SWG\Property(format="date")
+   * @var date
+   */
+  private $start_date;
   /**
    * @SWG\Property(format="date")
    * @var date
