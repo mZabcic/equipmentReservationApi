@@ -30,6 +30,11 @@ class Reservation extends Model
       return $this->hasMany('App\ReservationItem', 'reservation_id');
     }
 
+    public function status()
+    {
+        return $this->belongsTo('App\ReservationStatus','status_id', 'id');
+    }
+
     
 
 
@@ -84,6 +89,12 @@ class Reservation extends Model
    */
       private $updated_at;
 
+
+      /**
+   * @SWG\Property(format="User")
+   * @var User
+   */
+  private $user;
     /**
    * @SWG\Property(format="ReservationStatus")
    * @var ReservationStatus

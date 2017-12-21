@@ -12,12 +12,7 @@ class ReservationStatusSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('reservation_status')->insert([
-            'name' => 'U izradi',
-            'Description' => 'Trenutno se izrađuje rezervacija',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+       
         DB::table('reservation_status')->insert([
             'name' => 'Zahtijev poslan',
             'Description' => 'Zahtjev za rezervaciju je poslan administratoru',
@@ -43,10 +38,11 @@ class ReservationStatusSeeder extends Seeder
             'updated_at' => Carbon::now()
         ]);
         DB::table('reservation_status')->insert([
-            'name' => 'Odobrena',
-            'Description' => 'Rezervacija je odobrena',
+            'name' => 'Otkazana',
+            'Description' => 'Korisnik je otkazao',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
+        
     }
 }

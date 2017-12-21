@@ -97,6 +97,15 @@ Route::group([
     Route::delete('/delete/{id}', 'UserController@delete');
     Route::put('/edit', 'UserController@editAdmin');
 });
+
+Route::group([
+    'prefix' => 'reservations'
+
+], function ($router) {
+    Route::post('/approve', 'ReservationsController@approve');
+    Route::post('/return', 'ReservationsController@returned');
+    Route::post('/decline', 'ReservationsController@declined');
+});
         
 });
 

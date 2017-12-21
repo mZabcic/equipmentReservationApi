@@ -1636,7 +1636,7 @@
                         "name": "return_date",
                         "in": "body",
                         "description": "Datum vra\u0107anja opreme, null ukoliko ne zna\u0161 kolko ti treba",
-                        "required": false,
+                        "required": true,
                         "schema": {
                             "type": "string"
                         },
@@ -1680,6 +1680,12 @@
                         "description": "Invalid form data",
                         "schema": {
                             "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "411": {
+                        "description": "Daje listu rezervacija s itemima koji su zauzeti u tom periodu",
+                        "schema": {
+                            "$ref": "#/definitions/ReservationError"
                         }
                     }
                 },
@@ -1762,8 +1768,8 @@
                 "tags": [
                     "reservations"
                 ],
-                "summary": "Obri\u0161i korisnika",
-                "description": "Obri\u0161i rezervaciju sa danim ID-om",
+                "summary": "Stavlja rezervaciju u status otkazan",
+                "description": "Otkazuje rezervaciju sa danim ID-om",
                 "operationId": "api.reservations.delete",
                 "produces": [
                     "application/json"
@@ -1792,7 +1798,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Korisnik je obrisan"
+                        "description": "Rezervacija je otkazana"
                     },
                     "404": {
                         "description": "No data found",
@@ -1834,6 +1840,271 @@
                         "description": "Not your reservation",
                         "schema": {
                             "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/reservations/approved": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Stavlja rezervaciju u status odobrena",
+                "description": "Odobrava rezervaciju sa danim ID-om",
+                "operationId": "api.admin.approve",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "body",
+                        "description": "Id rezervacije",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rezervacija je odobrena"
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/reservations/returned": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Stavlja rezervaciju u status vra\u0107eno",
+                "description": "Sve stavke vra\u0107ene za rezervaciju sa danim ID-om",
+                "operationId": "api.admin.returned",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "body",
+                        "description": "Id rezervacije",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Stavke su vra\u0107ene"
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/reservations/decline": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Obijanje rezervacije",
+                "description": "Odbijena je rezervacija sa danim ID-om",
+                "operationId": "api.admin.decline",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "body",
+                        "description": "Id rezervacije",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "remark",
+                        "in": "body",
+                        "description": "Razlog odbijanja",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rezervacija odbijena"
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
                         }
                     }
                 },
@@ -2714,6 +2985,11 @@
                     "type": "string",
                     "format": "date"
                 },
+                "user": {
+                    "description": "",
+                    "format": "User",
+                    "$ref": "#/definitions/User"
+                },
                 "status": {
                     "description": "",
                     "format": "ReservationStatus",
@@ -2725,6 +3001,24 @@
                     "items": {
                         "$ref": "#/definitions/Item"
                     }
+                }
+            },
+            "type": "object"
+        },
+        "ReservationError": {
+            "properties": {
+                "reservations": {
+                    "description": "",
+                    "type": "array",
+                    "format": "Reservation",
+                    "items": {
+                        "$ref": "#/definitions/Reservation"
+                    }
+                },
+                "error": {
+                    "description": "",
+                    "type": "string",
+                    "format": "string"
                 }
             },
             "type": "object"

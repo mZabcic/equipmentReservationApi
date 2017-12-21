@@ -40,6 +40,12 @@ class Item extends Model
         return $this->belongsTo('App\DeviceType','device_type_id', 'id');
     }
 
+    public function reservations()
+    {
+        return $this->belongsToMany('App\Reservation', 'reservation_items', 'item_id', 'reservation_id');
+    }
+
+
 
       /**
      * @SWG\Property(format="int")

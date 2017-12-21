@@ -52,7 +52,7 @@ class ReservationsController extends Controller
      *    @SWG\Parameter(
 	 * 			name="return_date",
 	 * 			in="body",
-	 * 			required=false,
+	 * 			required=true,
 	 * 			type="string",
 	 * 			description="Datum vraćanja opreme, null ukoliko ne znaš kolko ti treba",
      * @SWG\Schema(type="string")
@@ -86,30 +86,47 @@ class ReservationsController extends Controller
      *         response=400,
      *         description="Invalid form data",
      *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=411,
+     *         description="Daje listu rezervacija s itemima koji su zauzeti u tom periodu",
+     *         @SWG\Schema(ref="#/definitions/ReservationError")
      *     )
      * )
      */
     public function reservationRequest(Request $request){
         $me = $this->guard()->user();
+        if ($request->input('start_date') == null)
+        return response()->json([
+      'error' => 'Start date is required'
+  ], 400);
+  if ($request->input('return_date') == null)
+  return response()->json([
+'error' => 'Return date is required'
+], 400);
         $data['start_date'] = DateTime::createFromFormat('d.m.Y', $request->input('start_date'));
-        $data['start_date'] =  $data['start_date']->format('Y-m-d H:i:s');
-        if ($request->input('return_date') != null) {
+        $data['start_date'] =  $data['start_date']->format('Y-m-d');
           $data['return_date'] = DateTime::createFromFormat('d.m.Y', $request->input('return_date'));
-        } else {
-            $data['return_date'] = null;
+          $data['return_date'] =  $data['return_date']->format('Y-m-d');
+        if ($data['return_date'] <  $data['start_date']) {
+            return response()->json([
+                'error' => 'Start date is bigger than return date'
+                ], 400);
         }
            $data['item_id'] = json_decode($request->input('item_id'));
              $data['remark'] = $request->input('remark');
        
-   if ($data['start_date'] == null)
-       return response()->json([
-     'error' => 'Start date is required'
- ], 400);
    if ($data['item_id'] == null)
        return response()->json([
      'error' => 'Items are required'
  ], 400);
-
+$check = $this->checkIfItemsTaken($data['start_date'], $data['return_date'], $data['item_id']);
+if (count($check) != 0) {
+    return response()->json([
+        'reservations' => $check,
+        'error' => 'Items are reserved for this period, change items or period'
+    ], 411);
+}
  $reservation = new Reservation;
  $reservation->user_id = $me->id;
  $reservation->start_date = $data['start_date'];
@@ -195,21 +212,21 @@ class ReservationsController extends Controller
             } catch (Illuminate\Database\QueryException $e) {
                 return response()->json(['error'=>'Invalid serach data'], 501);
             }
-            }
-      $reservations = Reservation::with('items.item')->get();
+      }
+      $reservations = Reservation::with('items.item')->with('user')->with('status')->where('status_id', '!=', 5)->get();
       return response()->json($reservations, 200);
     }
 
 
 
        /**
-     * Obriši Rezervaciju
+     * Stavlja rezervaciju u status otkazan
      * @param number $id
      * @return \Illuminate\Http\JsonResponse
      *
      * @SWG\Delete(
      *     path="reservations/delete/{id}",
-     *     description="Obriši rezervaciju sa danim ID-om",
+     *     description="Otkazuje rezervaciju sa danim ID-om",
      *     operationId="api.reservations.delete",
      *     produces={"application/json"},
      *     tags={"reservations"},
@@ -232,7 +249,7 @@ class ReservationsController extends Controller
      *     ),
      *     @SWG\Response(
      *         response=200,
-     *         description="Korisnik je obrisan"   
+     *         description="Rezervacija je otkazana"   
      *     ),
      *     @SWG\Response(
      *         response=404,
@@ -281,7 +298,8 @@ class ReservationsController extends Controller
         return response()->json(['error' => 'No reservation found'], 404);
     }
         if ($me->role_id == 1 || $reservation->user_id == $me->id) {
-           $resevation->delete();
+           $resevation->status_id = 5;
+           $resevation->save();
            return response()->json();
         } else {
             return response()->json(['error'=>'Not your reservation'], 403);
@@ -290,10 +308,320 @@ class ReservationsController extends Controller
     }
 
 
+        /**
+     * Stavlja rezervaciju u status odobrena
+     * @param number $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Post(
+     *     path="admin/reservations/approve",
+     *     description="Odobrava rezervaciju sa danim ID-om",
+     *     operationId="api.admin.approve",
+     *     produces={"application/json"},
+     *     tags={"admin"},
+     *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+     *   *     @SWG\Parameter(
+     *         name="id",
+     *         in="body",
+     *         description="Id rezervacije",
+     *         required=true,
+     *         type="string",
+     *       * @SWG\Schema(type="string")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Rezervacija je odobrena"   
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="No admin rights",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+*
+      *   
+     * )
+     */
+    public function approve(Request $request) {
+        if ($request->input('id') == null)
+        return response()->json([
+      'error' => 'ID is required'
+  ], 400);
+        try {
+        $resevation = Reservation::where('id', '=', $request->input('id'))->firstOrFail();
+    } catch (NotFound $e) {
+        return response()->json(['error' => 'No reservation found'], 404);
+    }
+           $resevation->status_id = 2;
+           $resevation->save();
+           return response()->json();
+       
+    
+    }
+
+
+           /**
+     * Stavlja rezervaciju u status vraćeno
+     * @param number $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Post(
+     *     path="admin/reservations/return",
+     *     description="Sve stavke vraćene za rezervaciju sa danim ID-om",
+     *     operationId="api.admin.returned",
+     *     produces={"application/json"},
+     *     tags={"admin"},
+     *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+     *   *     @SWG\Parameter(
+     *         name="id",
+     *         in="body",
+     *         description="Id rezervacije",
+     *         required=true,
+     *         type="string",
+     *       * @SWG\Schema(type="string")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Stavke su vraćene"   
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="No admin rights",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+*
+      *   
+     * )
+     */
+    public function returned(Request $request) {
+        if ($request->input('id') == null)
+        return response()->json([
+      'error' => 'ID is required'
+  ], 400);
+        try {
+        $resevation = Reservation::where('id', '=', $request->input('id'))->firstOrFail();
+    } catch (NotFound $e) {
+        return response()->json(['error' => 'No reservation found'], 404);
+    }
+           $resevation->status_id = 4;
+           $resevation->save();
+           return response()->json();
+       
+    
+    }
+
+
+    
+           /**
+     * Obijanje rezervacije
+     * @param number $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Post(
+     *     path="admin/reservations/decline",
+     *     description="Odbijena je rezervacija sa danim ID-om",
+     *     operationId="api.admin.decline",
+     *     produces={"application/json"},
+     *     tags={"admin"},
+     *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+     *   *     @SWG\Parameter(
+     *         name="id",
+     *         in="body",
+     *         description="Id rezervacije",
+     *         required=true,
+     *         type="string",
+     *       * @SWG\Schema(type="string")
+     *     ),
+     *    *   *     @SWG\Parameter(
+     *         name="remark",
+     *         in="body",
+     *         description="Razlog odbijanja",
+     *         required=true,
+     *         type="string",
+     *       * @SWG\Schema(type="string")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Rezervacija odbijena"   
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="No admin rights",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+*
+      *   
+     * )
+     */
+    public function declined(Request $request) {
+        if ($request->input('id') == null)
+        return response()->json([
+      'error' => 'ID is required'
+  ], 400);
+  if ($request->input('remark') == null)
+  return response()->json([
+'error' => 'Remark is required'
+], 400);
+        try {
+        $resevation = Reservation::where('id', '=', $request->input('id'))->firstOrFail();
+    } catch (NotFound $e) {
+        return response()->json(['error' => 'No reservation found'], 404);
+    }
+           $resevation->status_id = 3;
+           $resevation->remark = $request->input('remark');
+           $resevation->save();
+           return response()->json();
+       
+    
+    }
+
+
+    
+  
+    
+
+
+
+
 
 
      
-
+private function checkIfItemsTaken($start_date, $end_date, $items) {
+      $returnData = [];
+      foreach ($items as $item) {
+         $data = Item::with('reservations')->where('id', $item)->firstOrFail();
+       //  dd($data);
+        $data->reservations = $data->reservations->filter(function ($value, $key) use ($start_date, $end_date) {
+        if ($value->status_id == 3)
+           return true;
+        });
+         $test = $data->reservations->filter(function ($value, $key) use ($start_date, $end_date) {
+            if ($value->returned_date == null) {
+                $value->returned_date = '9999-12-31';
+            }
+           return DateTime::createFromFormat('Y-m-d', $value->start_date)  <= DateTime::createFromFormat('Y-m-d',$start_date) && DateTime::createFromFormat('Y-m-d', $value->returned_date)  >= DateTime::createFromFormat('Y-m-d', $end_date);
+        });
+        if (count($test) > 0) {
+        $res = Reservation::with('items')->where('id', $test[0]->id)->firstOrFail();
+        array_push($returnData, $res);
+        }
+      }
+      return $returnData;
+    
+}
     
 
     public function guard()
