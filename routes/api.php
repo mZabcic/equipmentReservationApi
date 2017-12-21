@@ -74,6 +74,7 @@ Route::group([
                 Route::post('/create/file', 'ItemsController@createFromFile');
                 Route::put('/edit', 'ItemsController@edit');
                 Route::delete('/delete/{id}', 'ItemsController@delete');
+                Route::get('/', 'ItemsController@getAll');
 
                 Route::group([
                     'prefix' => 'details'
@@ -87,6 +88,11 @@ Route::group([
                     Route::post('types/create', 'DetailsController@createType');
                     Route::post('subtypes/create', 'DetailsController@createSubType');
                     Route::post('kits/create', 'DetailsController@createKit');
+                    Route::get('/', 'DetailsController@getAll');
+                    Route::get('/devicetypes', 'DetailsController@getDeviceTypes');
+                    Route::get('/kits', 'DetailsController@getKits');
+                    Route::get('/subtypes', 'DetailsController@getSubtypes');
+                    Route::get('/types', 'DetailsController@getTypes');
                 });
                         
 });
@@ -96,6 +102,11 @@ Route::group([
 ], function ($router) {
     Route::delete('/delete/{id}', 'UserController@delete');
     Route::put('/edit', 'UserController@editAdmin');
+    Route::get('/current', 'UserController@currentUser');
+    Route::get('/', 'UserController@getUsers');
+    Route::get('/{id}', 'UserController@user');
+    Route::put('/edit', 'UserController@edit');
+    Route::delete('/delete', 'UserController@deleteMe');
 });
 
 Route::group([
@@ -105,6 +116,9 @@ Route::group([
     Route::post('/approve', 'ReservationsController@approve');
     Route::post('/return', 'ReservationsController@returned');
     Route::post('/decline', 'ReservationsController@declined');
+    Route::get('/', 'ReservationsController@all');
+    Route::post('/request', 'ReservationsController@reservationRequest');
+    Route::post('/delete/{id}', 'ReservationsController@delete');
 });
         
 });

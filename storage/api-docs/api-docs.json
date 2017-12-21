@@ -1848,7 +1848,7 @@
                 ]
             }
         },
-        "admin/reservations/approved": {
+        "admin/reservations/approve": {
             "post": {
                 "tags": [
                     "admin"
@@ -1933,7 +1933,7 @@
                 ]
             }
         },
-        "admin/reservations/returned": {
+        "admin/reservations/return": {
             "post": {
                 "tags": [
                     "admin"
