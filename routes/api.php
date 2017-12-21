@@ -110,6 +110,7 @@ Route::group([
     ], function ($router) {
         Route::get('/', 'ReservationsController@all');
         Route::post('/request', 'ReservationsController@reservationRequest');
+        Route::post('/delete/{id}', 'ReservationsController@delete');
 
         Route::group([
             

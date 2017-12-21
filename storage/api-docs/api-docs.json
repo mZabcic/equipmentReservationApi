@@ -455,6 +455,16 @@
                         "items": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id tipa ure\u0111aja",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -529,6 +539,16 @@
                         "type": "string",
                         "items": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id podtipa",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
                         }
                     }
                 ],
@@ -605,6 +625,16 @@
                         "items": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id tipa",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -679,6 +709,16 @@
                         "type": "string",
                         "items": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Kit id",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
                         }
                     }
                 ],
@@ -1496,6 +1536,28 @@
                 "produces": [
                     "application/json"
                 ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id rezervacije",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Item je obrisan"
@@ -1685,6 +1747,91 @@
                     },
                     "410": {
                         "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "reservations/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Obri\u0161i korisnika",
+                "description": "Obri\u0161i rezervaciju sa danim ID-om",
+                "operationId": "api.reservations.delete",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id rezervacije",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Korisnik je obrisan"
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "403": {
+                        "description": "Not your reservation",
                         "schema": {
                             "$ref": "#/definitions/TokenExpired"
                         }
@@ -1911,18 +2058,6 @@
                 "produces": [
                     "application/json"
                 ],
-                "parameters": [
-                    {
-                        "name": "filter",
-                        "in": "query",
-                        "description": "Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretra\u017eivanje>",
-                        "required": true,
-                        "type": "string",
-                        "items": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Korisnici",
@@ -1989,6 +2124,16 @@
                         "type": "string",
                         "items": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id korisnika",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
                         }
                     }
                 ],

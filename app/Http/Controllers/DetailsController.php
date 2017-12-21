@@ -467,6 +467,14 @@ class DetailsController extends Controller
 	 * 			description="JWT token",
       *         @SWG\Items(type="string")
 	 * 		),
+     *    *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id tipa uređaja",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
      *     @SWG\Response(
      *         response=200,
      *         description="Tip uređaja je obrisan"   
@@ -542,6 +550,14 @@ class DetailsController extends Controller
 	 * 			description="JWT token",
       *         @SWG\Items(type="string")
 	 * 		),
+     *    *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id podtipa",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
      *     @SWG\Response(
      *         response=200,
      *         description="Podtip je obrisan"   
@@ -616,6 +632,14 @@ class DetailsController extends Controller
 	 * 			description="JWT token",
       *         @SWG\Items(type="string")
 	 * 		),
+     *    *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id tipa",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
      *     @SWG\Response(
      *         response=200,
      *         description="Tip je obrisan"   
@@ -691,6 +715,14 @@ class DetailsController extends Controller
 	 * 			description="JWT token",
       *         @SWG\Items(type="string")
 	 * 		),
+     *    *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Kit id",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
      *     @SWG\Response(
      *         response=200,
      *         description="Kit je obrisan"   

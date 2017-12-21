@@ -546,6 +546,22 @@ if ($check == 0) {
      *     produces={"application/json"},
      *     tags={"admin"},
      *     schemes={"http"},
+     * *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id rezervacije",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
      *     @SWG\Response(
      *         response=200,
      *         description="Item je obrisan"   

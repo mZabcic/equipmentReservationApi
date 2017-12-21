@@ -190,7 +190,7 @@ class ReservationsController extends Controller
             try {
                $key = key($request->query());
                $value = $request->query($key);
-               $item = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->where($key, '=', $value )->get();
+               $item = Reservation::with('items.item')->where($key, '=', $value )->get();
                return response()->json($item, 200);
             } catch (Illuminate\Database\QueryException $e) {
                 return response()->json(['error'=>'Invalid serach data'], 501);
@@ -198,6 +198,95 @@ class ReservationsController extends Controller
             }
       $reservations = Reservation::with('items.item')->get();
       return response()->json($reservations, 200);
+    }
+
+
+
+       /**
+     * Obriši Rezervaciju
+     * @param number $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Delete(
+     *     path="reservations/delete/{id}",
+     *     description="Obriši rezervaciju sa danim ID-om",
+     *     operationId="api.reservations.delete",
+     *     produces={"application/json"},
+     *     tags={"reservations"},
+     *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+     *   *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id rezervacije",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Korisnik je obrisan"   
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="Not your reservation",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     )
+*
+      *   
+     * )
+     */
+    public function delete($id) {
+        $me = $this->guard()->user();
+        try {
+        $resevation = Reservation::where('id', '=', $id)->firstOrFail();
+    } catch (NotFound $e) {
+        return response()->json(['error' => 'No reservation found'], 404);
+    }
+        if ($me->role_id == 1 || $reservation->user_id == $me->id) {
+           $resevation->delete();
+           return response()->json();
+        } else {
+            return response()->json(['error'=>'Not your reservation'], 403);
+        }
+    
     }
 
 

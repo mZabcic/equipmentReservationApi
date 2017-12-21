@@ -315,14 +315,6 @@ return response()->json(['error' => 'Wrong password'], 401);
      *     produces={"application/json"},
      *     tags={"users"},
      *     schemes={"http"},
-     *       @SWG\Parameter(
-     *         name="filter",
-     *         in="query",
-     *         description="Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretraživanje>",
-     *         required=true,
-     *         type="string",
-     *         @SWG\Items(type="string")
-     *     ),
      *     @SWG\Response(
      *         response=200,
      *         description="Korisnici" ,
@@ -399,7 +391,15 @@ return response()->json(['error' => 'Wrong password'], 401);
 	 * 			type="string",
 	 * 			description="JWT token",
       *         @SWG\Items(type="string")
-	 * 		),
+	 * 		),    
+     *       @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id korisnika",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
      *     @SWG\Response(
      *         response=200,
      *         description="Korisnik je obrisan"   
