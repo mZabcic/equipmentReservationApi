@@ -96,7 +96,7 @@ class ItemsController extends Controller
             }
       $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with("reservations")->get();
       $items->free = $this->checkStatus($items);
-      $items->resesrvations = null;
+      $items->reservations = null;
       return response()->json($items, 200);
     }
 
