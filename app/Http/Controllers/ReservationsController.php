@@ -337,7 +337,7 @@ if (count($check) != 0) {
      * )
      */
     public function myExtends() {
-        $me = $this->guard()->user()
+        $me = $this->guard()->user();
        $reservations = Extend::with('reservation.items')->with('reservation.status')->where('user_id', $me->id)->get();
        return response()->json($reservations, 200);
      }
