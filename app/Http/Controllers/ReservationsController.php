@@ -285,7 +285,7 @@ if (count($check) != 0) {
      */
     public function allExtends() {
        
-      $reservations = Extend::with('reservation.items')->with('reservation.status')->get();
+      $reservations = Extend::with('reservation.items.item')->with('reservation.status')->get();
       return response()->json($reservations, 200);
     }
 
@@ -338,7 +338,7 @@ if (count($check) != 0) {
      */
     public function myExtends() {
         $me = $this->guard()->user();
-       $reservations = Extend::with('reservation.items')->with('reservation.status')->where('user_id', $me->id)->get();
+       $reservations = Extend::with('reservation.items.item')->with('reservation.status')->where('user_id', $me->id)->get();
        return response()->json($reservations, 200);
      }
  
@@ -1123,6 +1123,104 @@ $reservation->save();
 $extend->save();
     
     }
+
+
+    
+          /**
+     * Odbij produživanje
+     * @param number $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Post(
+     *     path="admin/reservations/extend/refuse",
+     *     description="Odbij produživanje",
+     *     operationId="api.admin.extend.block",
+     *     produces={"application/json"},
+     *     tags={"admin"},
+     *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+     *   *     @SWG\Parameter(
+     *         name="id",
+     *         in="body",
+     *         description="Id extenda",
+     *         required=true,
+     *         type="string",
+     *       * @SWG\Schema(type="string")
+     *     ),
+     *   *     @SWG\Parameter(
+     *         name="reason",
+     *         in="body",
+     *         description="Razlog odbijanja",
+     *         required=false,
+     *         type="string",
+     *       * @SWG\Schema(type="string")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Rezervacija produžena"   
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="No admin rights",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+*
+      *   
+     * )
+     */
+    public function blockExtend(Request $request) {
+        if ($request->input('id') == null)
+        return response()->json([
+      'error' => 'ID is required'
+  ], 400);
+        try {
+        $extend = Extend::where('id', '=', $request->input('id'))->with('reservation')->firstOrFail();
+    } catch (NotFound $e) {
+        return response()->json(['error' => 'No extension request found'], 404);
+    }
+   $extend->status = "Odbijeno";
+   $extend->reason = $request->input('reason');
+   $extend->save();
+    
+    }
+
 
 
 
