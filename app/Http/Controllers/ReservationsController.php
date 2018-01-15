@@ -885,7 +885,7 @@ if ($reservation->user_id != $me->id) {
         }
   $items = array();        
  foreach ($reservation->items as $i) {
-    array_push($items, $i);
+    array_push($items, $i->id);
  }    
 
 $check = $this->checkIfItemsTaken($data['start_date'], $data['new_return_date'], $items);
