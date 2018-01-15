@@ -98,8 +98,10 @@ class ItemsController extends Controller
             }
       $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with("reservations")->get();
    
-      $items->free = $this->checkStatus($items);
-      $items->reservations = null;
+       foreach ($items as $i) {
+        $i->free = $this->checkStatus($i);
+        $i->reservations = null;
+       }
       return response()->json($items, 200);
     }
 
