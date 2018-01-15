@@ -5,7 +5,7 @@
         "description": "API za login, registraciju i upravljanje korisnicima",
         "termsOfService": "",
         "contact": {
-            "email": "mislav.zabcic@gmail.com"
+            "email": "mislav.zabcic@fer.hr"
         },
         "license": {
             "name": "MIT",
@@ -13,7 +13,7 @@
         },
         "version": "1.0.0"
     },
-    "host": "localhost",
+    "host": "http://159.89.108.135",
     "basePath": "/api",
     "schemes": [
         "http",
@@ -2105,6 +2105,75 @@
                         "description": "No admin rights",
                         "schema": {
                             "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "reservations/user/:id": {
+            "get": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Dohvati sve rezervacije nekog korisnika",
+                "description": "Dohvati sve items ili filtrirane od nekog korisnika",
+                "operationId": "api.reservations.users",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id korisnika",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rezervacije korisnika",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Reservation"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "501": {
+                        "description": "Invalid search data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
                         }
                     }
                 },
