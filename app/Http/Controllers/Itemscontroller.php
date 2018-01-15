@@ -629,12 +629,9 @@ if ($check == 0) {
      *     tags={"items"},
      *     @SWG\Response(
      *         response=200,
-     *         description="Item free"
+     *         description="Item free ",
+     *  * @SWG\Schema(type="boolean")
       *     ),
-     *       @SWG\Response(
-     *         response=411,
-     * description="Item taken"
-     *     ),
      *    @SWG\Response(
      *         response=500,
      *         description="Internal server error",
@@ -678,9 +675,9 @@ if ($check == 0) {
          return DateTime::createFromFormat('Y-m-d', $today)  <= DateTime::createFromFormat('Y-m-d',$start_date) && DateTime::createFromFormat('Y-m-d', $today)  >= DateTime::createFromFormat('Y-m-d', $end_date);
       });
     if (count($items->reservations) == 0) {
-      return response()->json(200);
+      return response()->json(true, 200);
     }  else 
-    return response()->json(411);
+    return response()->json(false, 200);
   }
 
 
