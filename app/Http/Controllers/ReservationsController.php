@@ -685,6 +685,66 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
     }
 
 
+    /**
+     * Dohvati sve rezervacije nekog itema
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Get(
+     *     path="reservations/item/{id}",
+     *     description="Dohvati sve items ili filtrirane od nekog itema",
+     *     operationId="api.reservations.items",
+     *     produces={"application/json"},
+     *     tags={"reservations"},
+     *     schemes={"http"},
+     *        @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id itema",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Rezervacije po itemu" ,
+     *       
+     *   @SWG\Schema(type="array", @SWG\Items(ref="#/definitions/Reservation"))  
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=501,
+     *         description="Invalid search data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     )
+*
+      *   
+     * )
+     */
+    public function byItem($id) {
+        $reservations = Item::with('reservations')->get();
+        return response()->json($reservations, 200);
+      }
+
+
 
 
     public function guard()

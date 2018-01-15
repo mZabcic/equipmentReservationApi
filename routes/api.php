@@ -135,7 +135,8 @@ Route::group([
         Route::post('/request', 'ReservationsController@reservationRequest');
         Route::post('/delete/{id}', 'ReservationsController@delete');
         Route::get('/user/{id}', 'ReservationsController@byUser');
-
+        Route::get('/item/{id}', 'ReservationsController@byItem');
+        
         Route::group([
             
                 'middleware' => 'jwt',
