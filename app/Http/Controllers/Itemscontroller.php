@@ -101,7 +101,7 @@ class ItemsController extends Controller
        foreach ($items as $i) {
         $i->free = $this->checkStatus($i);
        }
-       $items->forget('reservations');
+       unset($items['reservations']);
       return response()->json($items, 200);
     }
 
