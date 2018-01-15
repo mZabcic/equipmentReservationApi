@@ -94,8 +94,9 @@ class ItemsController extends Controller
                 return response()->json(['error'=>'Invalid serach data'], 501);
             }
             }
-      $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->get();
+      $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with("reservations")->get();
       $items->free = $this->checkStatus($items);
+      $items->resesrvations = null;
       return response()->json($items, 200);
     }
 
