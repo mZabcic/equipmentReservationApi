@@ -13,6 +13,7 @@ use App\Type;
 use App\ReservationStatus;
 use App\Reservation;
 use App\ReservationItems;
+use App\Extend;
 use DB;
 use Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException as NotFound;
@@ -91,6 +92,21 @@ class ReservationsController extends Controller
      *         response=411,
      *         description="Daje listu rezervacija s itemima koji su zauzeti u tom periodu",
      *         @SWG\Schema(ref="#/definitions/ReservationError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
      *     )
      * )
      */
@@ -743,6 +759,140 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
         $reservations = Item::with('reservations.user')->with('reservations.status')->get();
         return response()->json($reservations, 200);
       }
+
+
+
+
+
+          /**
+     * Zatraži produženje
+     * @param string $start_date
+     * @param string $return_date
+     * @param string[] $item_id
+     *  @param string[] $remark
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Post(
+     *     path="reservations/request/extend",
+     *     description="Zatraži produženje rezervacije opreme",
+     *     operationId="api.reservations.request.extend",
+     *     produces={"application/json"},
+     *     tags={"reservations"},
+     *     schemes={"http"},
+     *    @SWG\Parameter(
+	 * 			name="new_return_date",
+	 * 			in="body",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="Novi datum vraćanja opreme",
+     * @SWG\Schema(type="string")
+	 * 		),
+     *    @SWG\Parameter(
+	 * 			name="reservation_id",
+	 * 			in="body",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="Ime",
+   *   @SWG\Schema(type="array", @SWG\Items(type="string"))  
+	 * 		),
+     *    @SWG\Parameter(
+	 * 			name="reason",
+	 * 			in="body",
+	 * 			required=false,
+	 * 			type="string",
+	 * 			description="Napomena uz produženje",
+     *           @SWG\Schema(type="string")
+	 * 		),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Zahtjev za produžetkom zatražen"
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid form data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *      @SWG\Response(
+     *         response=404,
+     *         description="No reservation found",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     )
+     * ,
+     *      @SWG\Response(
+     *         response=405,
+     *         description="Not your reservation",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     )
+     * )
+     */
+    public function extendRequest(Request $request){
+        $me = $this->guard()->user();
+        if ($request->input('new_return_date') == null)
+        return response()->json([
+      'error' => 'New return date is required'
+  ], 400);
+  if ($request->input('reservation_id') == null)
+  return response()->json([
+'error' => 'Reservation id is required'
+], 400);
+$data['reservation_id'] = $request->input('reservation_id');
+$data['reason'] = $request->input('reason');
+       try {
+           $reservation = Reservation::where('id', $request->input('reservation_id',$data['reservation_id'])->with('items')->firstOrfail();
+       } (NotFound $e) {
+        return response()->json(['error' => 'No reservation found'], 404);
+    }
+if ($reservation->user_id != $me->id) {
+    return response()->json(['error' => 'Not your reservation'], 405);
+}
+        $data['new_return_date'] = DateTime::createFromFormat('d.m.Y', $request->input('start_date'));
+        $data['new_return_date'] =  $data['new_return_date']->format('Y-m-d');
+        $data['start_date'] = DateTime::createFromFormat('d.m.Y', $reservation->start_date);
+        $data['start_date'] =  $data['start_date']->format('Y-m-d');
+        if ($data['new_return_date'] <  $data['start_date']) {
+            return response()->json([
+                'error' => 'Start date is bigger than return date'
+                ], 400);
+        }
+           
+   var $items = array();        
+ foreach ($reservation->items as $i) {
+    array_push($items, $i);
+ }    
+
+$check = $this->checkIfItemsTaken($data['start_date'], $data['new_return_date'], $items);
+if (count($check) != 0) {
+    return response()->json([
+        'reservations' => $check,
+        'error' => 'Items are reserved for this period, change items or period'
+    ], 411);
+}
+ $extend = new Extend;
+ $extend->user_id = $me->id;
+ $extend->reservation_id = $reservation->id;
+ $extend->return_date = $data['new_return_date'];
+ $extend->reason = $data['reason'];
+ $extend->status = "Zatraženo produživanje";
+ $extend->save();
+
+ 
+
+}
 
 
 

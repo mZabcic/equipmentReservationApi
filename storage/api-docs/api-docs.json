@@ -1738,6 +1738,24 @@
                         "schema": {
                             "$ref": "#/definitions/ReservationError"
                         }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
                     }
                 },
                 "schemes": [
@@ -2292,6 +2310,98 @@
                     },
                     "410": {
                         "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "reservations/request/extend": {
+            "post": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Zatra\u017ei produ\u017eenje",
+                "description": "Zatra\u017ei produ\u017eenje rezervacije opreme",
+                "operationId": "api.reservations.request.extend",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "new_return_date",
+                        "in": "body",
+                        "description": "Novi datum vra\u0107anja opreme",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "reservation_id",
+                        "in": "body",
+                        "description": "Ime",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "string"
+                    },
+                    {
+                        "name": "reason",
+                        "in": "body",
+                        "description": "Napomena uz produ\u017eenje",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Zahtjev za produ\u017eetkom zatra\u017een"
+                    },
+                    "400": {
+                        "description": "Invalid form data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "404": {
+                        "description": "No reservation found",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "405": {
+                        "description": "Not your reservation",
                         "schema": {
                             "$ref": "#/definitions/TokenExpired"
                         }
@@ -3004,6 +3114,61 @@
                     "description": "",
                     "type": "string",
                     "format": "date"
+                }
+            },
+            "type": "object"
+        },
+        "Extend": {
+            "properties": {
+                "id": {
+                    "description": "",
+                    "type": "integer",
+                    "format": "int"
+                },
+                "user_id": {
+                    "description": "",
+                    "type": "integer",
+                    "format": "int"
+                },
+                "reservation_id": {
+                    "description": "",
+                    "type": "integer",
+                    "format": "int"
+                },
+                "status": {
+                    "description": "",
+                    "type": "string",
+                    "format": "string"
+                },
+                "new_date_to": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
+                },
+                "reason": {
+                    "description": "",
+                    "type": "string",
+                    "format": "string"
+                },
+                "created_at": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
+                },
+                "updated_at": {
+                    "description": "",
+                    "type": "string",
+                    "format": "date"
+                },
+                "user": {
+                    "description": "",
+                    "format": "User",
+                    "$ref": "#/definitions/User"
+                },
+                "reservation": {
+                    "description": "",
+                    "format": "Reservation",
+                    "$ref": "#/definitions/Reservation"
                 }
             },
             "type": "object"
