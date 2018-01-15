@@ -89,6 +89,8 @@ class ItemsController extends Controller
                $key = key($request->query());
                $value = $request->query($key);
                $item = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->where($key, '=', $value )->get();
+               $item->free = $this->checkStatus($items);
+               $item->reservations = null;
                return response()->json($item, 200);
             } catch (Illuminate\Database\QueryException $e) {
                 return response()->json(['error'=>'Invalid serach data'], 501);
