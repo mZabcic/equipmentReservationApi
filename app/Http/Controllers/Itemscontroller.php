@@ -100,8 +100,8 @@ class ItemsController extends Controller
    
        foreach ($items as $i) {
         $i->free = $this->checkStatus($i);
-        $i->reservations = null;
        }
+       $items->forget('reservations');
       return response()->json($items, 200);
     }
 
