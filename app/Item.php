@@ -17,7 +17,7 @@ class Item extends Model
      * @var array
      */
     protected $fillable = [
-        'identifier', 'description', 'picture', 'kit_id', 'type_id', 'subtype_id', 'device_type_id'
+        'identifier', 'description', 'picture', 'kit_id', 'type_id', 'subtype_id', 'device_type_id', 'working'
     ];
 
     public function kit()
@@ -94,6 +94,11 @@ class Item extends Model
      * @var file
      */
     private $file;
+     /**
+     * @SWG\Property(format="boolean")
+     * @var boolean
+     */
+    private $working;
     
 
       /**
