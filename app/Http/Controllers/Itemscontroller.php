@@ -624,7 +624,7 @@ if ($check == 0) {
      * @SWG\Get(
      *     path="items",
      *     description="Dohvati sve items ili filtrirane",
-     *     operationId="api.items",
+     *     operationId="api.items.statuses",
      *     produces={"application/json"},
      *     tags={"items"},
      *     schemes={"http"},
