@@ -531,6 +531,7 @@ if ($check == 0) {
       $itemNew->type_id = $item[0]->type_id != null ? $item[0]->type_id : $itemNew->type_id;
       $itemNew->subtype_id = $item[0]->subtype_id != null ? $item[0]->subtype_id : $itemNew->subtype_id;
       $itemNew->device_type_id = $item[0]->device_type_id != null ? $item[0]->device_type_id : $itemNew->device_type_id;
+      $itemNew->working = $item[0]->working != null ? $item[0]->working : $itemNew->working;
       $itemNew->updated_at = Carbon::now();
       $itemNew->save();
      
@@ -705,6 +706,174 @@ if ($check == 0) {
   return false;
  }
 
+
+
+  /**
+     * Item ne radi
+     * @param number $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Put(
+     *     path="admin/items/broken/{id}",
+     *     description="Item ne radi",
+     *     operationId="api.admin.items.borken",
+     *     produces={"application/json"},
+     *     tags={"admin"},
+     *     schemes={"http"},
+     * *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id rezervacije",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Item je obrisan"   
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="No admin rights",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+*
+      *   
+     * )
+     */
+    public function notWorking($id) {
+      try {
+      $item = Item::where('id', '=', $id)->firstOrFail();
+  } catch (NotFound $e) {
+      return response()->json(['error' => 'No item found'], 404);
+  }
+      $item->working = false;
+      $item->save();
+  return response()->json();
+  
+  }
+
+
+  /**
+     * Item radi
+     * @param number $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Put(
+     *     path="admin/items/working/{id}",
+     *     description="Item ne radi",
+     *     operationId="api.admin.items.working",
+     *     produces={"application/json"},
+     *     tags={"admin"},
+     *     schemes={"http"},
+     * *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id rezervacije",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Item radi"   
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="No admin rights",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+*
+      *   
+     * )
+     */
+    public function working($id) {
+      try {
+      $item = Item::where('id', '=', $id)->firstOrFail();
+  } catch (NotFound $e) {
+      return response()->json(['error' => 'No item found'], 404);
+  }
+      $item->working = true;
+      $item->save();
+  return response()->json();
+  
+  }
   
 
     public function guard()

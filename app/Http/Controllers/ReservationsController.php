@@ -143,6 +143,7 @@ if (count($check) != 0) {
         'error' => 'Items are reserved for this period, change items or period'
     ], 411);
 }
+
  $reservation = new Reservation;
  $reservation->user_id = $me->id;
  $reservation->start_date = $data['start_date'];
