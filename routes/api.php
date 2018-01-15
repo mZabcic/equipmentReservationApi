@@ -134,7 +134,7 @@ Route::group([
         Route::get('/', 'ReservationsController@all');
         Route::post('/request', 'ReservationsController@reservationRequest');
         Route::post('/delete/{id}', 'ReservationsController@delete');
-        Route::get('/user/{id}', 'ReservationsController@abyUser');
+        Route::get('/user/{id}', 'ReservationsController@byUser');
 
         Route::group([
             
