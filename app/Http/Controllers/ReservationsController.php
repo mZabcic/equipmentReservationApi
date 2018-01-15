@@ -234,6 +234,117 @@ if (count($check) != 0) {
     }
 
 
+    
+
+
+/**
+     * Dohvati sve zahtjeve za produživanjem
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Get(
+     *     path="admin/reservations/extends",
+     *     description="Dohvati sve rezervacije sa zahtjevom za produživanje",
+     *     operationId="api.reservations.extend.all",
+     *     produces={"application/json"},
+     *     tags={"reservations"},
+     *     schemes={"http"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Reservations with extend request" ,
+     *       
+     *   @SWG\Schema(type="array", @SWG\Items(ref="#/definitions/Extend"))  
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=501,
+     *         description="Invalid search data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     )
+*
+      *   
+     * )
+     */
+    public function allExtends() {
+       
+      $reservations = Extend::with('reservation.items')->with('reservation.status')->get();
+      return response()->json($reservations, 200);
+    }
+
+
+    /**
+     * Dohvati sve zahtjeve za produživanjem koje sam ja kreirao
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Get(
+     *     path="/reservations/extends",
+     *     description="Dohvati sve moje rezervacije sa zahtjevom za produživanje",
+     *     operationId="api.reservations.extend.all",
+     *     produces={"application/json"},
+     *     tags={"reservations"},
+     *     schemes={"http"},
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Reservations with extend request" ,
+     *       
+     *   @SWG\Schema(type="array", @SWG\Items(ref="#/definitions/Extend"))  
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=501,
+     *         description="Invalid search data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     )
+*
+      *   
+     * )
+     */
+    public function myExtends() {
+        $me = $this->guard()->user()
+       $reservations = Extend::with('reservation.items')->with('reservation.status')->where('user_id', $me->id)->get();
+       return response()->json($reservations, 200);
+     }
+ 
+ 
+
+
 
        /**
      * Stavlja rezervaciju u status otkazan
@@ -905,6 +1016,113 @@ if (count($check) != 0) {
  
 
 }
+
+
+          /**
+     * Prihvati produživanje
+     * @param number $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Post(
+     *     path="admin/reservations/extend",
+     *     description="Prihvaća produživanje",
+     *     operationId="api.admin.extend",
+     *     produces={"application/json"},
+     *     tags={"admin"},
+     *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+     *   *     @SWG\Parameter(
+     *         name="id",
+     *         in="body",
+     *         description="Id extenda",
+     *         required=true,
+     *         type="string",
+     *       * @SWG\Schema(type="string")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Rezervacija produžena"   
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="No admin rights",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+*
+      *   
+     * )
+     */
+    public function extend(Request $request) {
+        if ($request->input('id') == null)
+        return response()->json([
+      'error' => 'ID is required'
+  ], 400);
+        try {
+        $extend = Extend::where('id', '=', $request->input('id'))->with('reservation')->firstOrFail();
+    } catch (NotFound $e) {
+        return response()->json(['error' => 'No extension request found'], 404);
+    }
+    try {
+        $reservation = Reservation::where('id', '=', $extend->reservation_id)->with('items')->firstOrFail();
+    } catch (NotFound $e) {
+        return response()->json(['error' => 'No reservation found'], 404);
+    }
+    $items = array();        
+    foreach ($reservation->items as $i) {
+       array_push($items, $i->id);
+    }    
+   
+$check = $this->checkIfItemsTaken($reservation->start_date, $extend->new_date_to, $items);
+if (count($check) != 0) {
+    return response()->json([
+        'reservations' => $check,
+        'error' => 'Items are reserved for this period, change items or period'
+    ], 411);
+}
+
+$reservation->return_date = $extend->new_date_to;
+$extend->status = "Produženo";
+$reservation->save();
+$extend->save();
+    
+    }
 
 
 

@@ -117,6 +117,8 @@ Route::group([
     Route::post('/approve', 'ReservationsController@approve');
     Route::post('/return', 'ReservationsController@returned');
     Route::post('/decline', 'ReservationsController@declined');
+    Route::post('/extend', 'ReservationsController@extend');
+    Route::get('/extends', 'ReservationsController@allExtends');
     Route::get('/', 'ReservationsController@all');
     Route::post('/request', 'ReservationsController@reservationRequest');
     Route::post('/delete/{id}', 'ReservationsController@delete');
@@ -138,6 +140,7 @@ Route::group([
         Route::post('/delete/{id}', 'ReservationsController@delete');
         Route::get('/user/{id}', 'ReservationsController@byUser');
         Route::get('/item/{id}', 'ReservationsController@byItem');
+        Route::get('/extends', 'ReservationsController@myExtends');
         
         Route::group([
             
