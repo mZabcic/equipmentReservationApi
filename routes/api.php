@@ -76,8 +76,8 @@ Route::group([
                 Route::put('/edit', 'ItemsController@edit');
                 Route::delete('/delete/{id}', 'ItemsController@delete');
                 Route::get('/', 'ItemsController@getAll');
-                Route::put('/working', 'ItemsController@working');
-                Route::put('/broken', 'ItemsController@notWorking');
+                Route::put('/working/{id}', 'ItemsController@working');
+                Route::put('/broken/{id}', 'ItemsController@notWorking');
 
                 Route::group([
                     'prefix' => 'details'
