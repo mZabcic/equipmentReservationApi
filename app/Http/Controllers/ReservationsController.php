@@ -860,10 +860,9 @@ $data['reason'] = $request->input('reason');
 if ($reservation->user_id != $me->id) {
     return response()->json(['error' => 'Not your reservation'], 405);
 }
-        $data['new_return_date'] = DateTime::createFromFormat('d.m.Y', $request->input('start_date'));
+        $data['new_return_date'] = DateTime::createFromFormat('d.m.Y', $request->input('new_return_date'));
         $data['new_return_date'] =  $data['new_return_date']->format('Y-m-d');
-        $data['start_date'] = DateTime::createFromFormat('d.m.Y', $reservation->start_date);
-        $data['start_date'] =  $data['start_date']->format('Y-m-d');
+        $data['start_date'] =  $reservation->start_date;
         if ($data['new_return_date'] <  $data['start_date']) {
             return response()->json([
                 'error' => 'Start date is bigger than return date'
