@@ -21,7 +21,7 @@ use Carbon\Carbon;
 /**
  * @SWG\Swagger(
  *     schemes={"http","https"},
- *     host="localhost",
+ *     host="http://159.89.108.135",
  *     basePath="/api",
  *     @SWG\Info(
  *         version="1.0.0",
@@ -29,7 +29,7 @@ use Carbon\Carbon;
  *         description="API za login, registraciju i upravljanje korisnicima",
  *         termsOfService="",
  *         @SWG\Contact(
- *             email="mislav.zabcic@gmail.com"
+ *             email="mislav.zabcic@fer.hr"
  *         ),
  *         @SWG\License(
  *             name="MIT",
