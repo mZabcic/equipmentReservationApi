@@ -2405,6 +2405,12 @@
                         "schema": {
                             "$ref": "#/definitions/TokenExpired"
                         }
+                    },
+                    "406": {
+                        "description": "Wrong reservation status",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
                     }
                 },
                 "schemes": [

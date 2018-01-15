@@ -837,6 +837,11 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
      *         response=405,
      *         description="Not your reservation",
      *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     )   ,
+     *      @SWG\Response(
+     *         response=406,
+     *         description="Wrong reservation status",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
      *     )
      * )
      */
@@ -857,6 +862,9 @@ $data['reason'] = $request->input('reason');
        } catch (NotFound $e) {
         return response()->json(['error' => 'No reservation found'], 404);
     }
+    if ($reservation->status_id != 2) {
+        return response()->json(['error' => 'Reservation must be in status_id 2'], 406);
+    }
 if ($reservation->user_id != $me->id) {
     return response()->json(['error' => 'Not your reservation'], 405);
 }
@@ -869,6 +877,11 @@ if ($reservation->user_id != $me->id) {
                 ], 400);
         }
            
+        if ($data['new_return_date'] <  $reservation->return_date) {
+            return response()->json([
+                'error' => 'Return date is bigger than new return date'
+                ], 400);
+        }
   $items = array();        
  foreach ($reservation->items as $i) {
     array_push($items, $i);
