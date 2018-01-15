@@ -870,7 +870,7 @@ if ($reservation->user_id != $me->id) {
                 ], 400);
         }
            
-   var $items = array();        
+  $items = array();        
  foreach ($reservation->items as $i) {
     array_push($items, $i);
  }    
