@@ -1610,6 +1610,54 @@
                 ]
             }
         },
+        "items/status/:id": {
+            "get": {
+                "tags": [
+                    "items"
+                ],
+                "summary": "Dohvati status itema, true znaci da je slobodan na danasnji dan, false ako nije",
+                "description": "Dohvati status itema",
+                "operationId": "api.items.statuses",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item status"
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "501": {
+                        "description": "Invalid search data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                }
+            }
+        },
         "reservations/request": {
             "post": {
                 "tags": [

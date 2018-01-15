@@ -618,30 +618,20 @@ if ($check == 0) {
 
 
   /**
-     * Dohvati iteme ili iteme prema parametrima
+     * Dohvati status itema, true znaci da je slobodan na danasnji dan, false ako nije
      * @return \Illuminate\Http\JsonResponse
      *
      * @SWG\Get(
-     *     path="items",
-     *     description="Dohvati sve items ili filtrirane",
+     *     path="items/status/:id",
+     *     description="Dohvati status itema",
      *     operationId="api.items.statuses",
      *     produces={"application/json"},
      *     tags={"items"},
-     *     schemes={"http"},
-     *       @SWG\Parameter(
-     *         name="filter",
-     *         in="query",
-     *         description="Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretraživanje>",
-     *         required=true,
-     *         type="string",
-     *         @SWG\Items(type="string")
-     *     ),
      *     @SWG\Response(
      *         response=200,
-     *         description="Items" ,
-     *       
-     *   @SWG\Schema(type="array", @SWG\Items(ref="#/definitions/Item"))  
-     *     ),
+     *         description="Item status" ,
+    *          
+      *     ),
      *    @SWG\Response(
      *         response=500,
      *         description="Internal server error",
