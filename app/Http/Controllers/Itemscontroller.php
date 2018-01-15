@@ -630,12 +630,10 @@ if ($check == 0) {
      *     @SWG\Response(
      *         response=200,
      *         description="Item free"
-    *          
       *     ),
      *       @SWG\Response(
      *         response=411,
-     *         description=Item reserved today,
-     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     * description="Item taken"
      *     ),
      *    @SWG\Response(
      *         response=500,

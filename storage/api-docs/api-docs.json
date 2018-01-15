@@ -1623,7 +1623,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Item status"
+                        "description": "Item free"
+                    },
+                    "411": {
+                        "description": "Item taken"
                     },
                     "500": {
                         "description": "Internal server error",
