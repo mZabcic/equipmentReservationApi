@@ -860,7 +860,7 @@ $data['reason'] = $request->input('reason');
        try {
            $reservation = Reservation::where('id',$data['reservation_id'])->with('items')->firstOrfail();
        } catch (NotFound $e) {
-        return response()->json(['error' => 'No reservation found'], 404);
+        return response()->json(['error' => 'No reservation found'], 406);
     }
     if ($reservation->status_id != 2) {
         return response()->json(['error' => 'Reservation must be in status_id 2'], 406);
