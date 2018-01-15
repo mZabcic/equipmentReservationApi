@@ -773,7 +773,7 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
      * @return \Illuminate\Http\JsonResponse
      *
      * @SWG\Post(
-     *     path="reservations/request/extend",
+     *     path="reservations/extend",
      *     description="Zatraži produženje rezervacije opreme",
      *     operationId="api.reservations.request.extend",
      *     produces={"application/json"},
