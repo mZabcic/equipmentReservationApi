@@ -617,6 +617,66 @@ if ($check == 0) {
   }
 
 
+  /**
+     * Dohvati iteme ili iteme prema parametrima
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Get(
+     *     path="items",
+     *     description="Dohvati sve items ili filtrirane",
+     *     operationId="api.items",
+     *     produces={"application/json"},
+     *     tags={"items"},
+     *     schemes={"http"},
+     *       @SWG\Parameter(
+     *         name="filter",
+     *         in="query",
+     *         description="Pisati u formatu <ime_kolone_u_tablici>=<pojam_za_pretraživanje>",
+     *         required=true,
+     *         type="string",
+     *         @SWG\Items(type="string")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Items" ,
+     *       
+     *   @SWG\Schema(type="array", @SWG\Items(ref="#/definitions/Item"))  
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=501,
+     *         description="Invalid search data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     )
+*
+      *   
+     * )
+     */
+    public function getstatus($id) {
+    $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with('reservations')->where('id', $id)->firstOrFail();
+    return response()->json($items, 200);
+  }
+
+
   
 
     public function guard()

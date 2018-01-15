@@ -2113,7 +2113,7 @@
                 ]
             }
         },
-        "reservations/user/:id": {
+        "reservations/user/{id}": {
             "get": {
                 "tags": [
                     "reservations"
@@ -2139,6 +2139,75 @@
                 "responses": {
                     "200": {
                         "description": "Rezervacije korisnika",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Reservation"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "501": {
+                        "description": "Invalid search data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "reservations/item/{id}": {
+            "get": {
+                "tags": [
+                    "reservations"
+                ],
+                "summary": "Dohvati sve rezervacije nekog itema",
+                "description": "Dohvati sve items ili filtrirane od nekog itema",
+                "operationId": "api.reservations.items",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id itema",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rezervacije po itemu",
                         "schema": {
                             "type": "array",
                             "items": {
@@ -2818,6 +2887,7 @@
         "CustomError": {
             "properties": {
                 "error": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 }
@@ -2827,24 +2897,28 @@
         "DetailsResponse": {
             "properties": {
                 "kits": {
+                    "description": "",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/Kit"
                     }
                 },
                 "types": {
+                    "description": "",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/Type"
                     }
                 },
                 "subtypes": {
+                    "description": "",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/SubType"
                     }
                 },
                 "device_types": {
+                    "description": "",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/DeviceType"
@@ -2856,22 +2930,27 @@
         "DeviceType": {
             "properties": {
                 "id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "label": {
+                    "description": "",
                     "type": "integer",
                     "format": "string"
                 },
                 "description": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 },
                 "created_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "updated_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 }
@@ -2881,61 +2960,76 @@
         "Item": {
             "properties": {
                 "id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "identifier": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 },
                 "description": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 },
                 "picture": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 },
                 "kit_id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "type_id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "subtype_id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "device_type_id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "file": {
+                    "description": "",
                     "format": "file"
                 },
                 "created_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "updated_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "kit": {
+                    "description": "",
                     "format": "Kit",
                     "$ref": "#/definitions/Kit"
                 },
                 "type": {
+                    "description": "",
                     "format": "Type",
                     "$ref": "#/definitions/Type"
                 },
                 "subtype": {
+                    "description": "",
                     "format": "Subtype",
                     "$ref": "#/definitions/SubType"
                 },
                 "device_type": {
+                    "description": "",
                     "format": "DeviceType",
                     "$ref": "#/definitions/DeviceType"
                 }
@@ -2945,18 +3039,22 @@
         "Kit": {
             "properties": {
                 "id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "name": {
+                    "description": "",
                     "type": "integer",
                     "format": "string"
                 },
                 "created_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "updated_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 }
@@ -2966,10 +3064,12 @@
         "LoginResponse": {
             "properties": {
                 "token": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 },
                 "user": {
+                    "description": "",
                     "format": "User",
                     "$ref": "#/definitions/User"
                 }
@@ -2979,50 +3079,62 @@
         "Reservation": {
             "properties": {
                 "id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "user_id": {
+                    "description": "",
                     "type": "integer",
                     "format": "string"
                 },
                 "start_date": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "return_date": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "returned_date": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "remark": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 },
                 "status_id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "created_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "updated_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "user": {
+                    "description": "",
                     "format": "User",
                     "$ref": "#/definitions/User"
                 },
                 "status": {
+                    "description": "",
                     "format": "ReservationStatus",
                     "$ref": "#/definitions/ReservationStatus"
                 },
                 "items": {
+                    "description": "",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/Item"
@@ -3034,6 +3146,7 @@
         "ReservationError": {
             "properties": {
                 "reservations": {
+                    "description": "",
                     "type": "array",
                     "format": "Reservation",
                     "items": {
@@ -3041,6 +3154,7 @@
                     }
                 },
                 "error": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 }
@@ -3050,30 +3164,37 @@
         "ReservationItem": {
             "properties": {
                 "id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "reservation_id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "item_id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "created_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "updated_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "reservatin": {
+                    "description": "",
                     "format": "Reservation",
                     "$ref": "#/definitions/Reservation"
                 },
                 "item": {
+                    "description": "",
                     "format": "Item",
                     "$ref": "#/definitions/Item"
                 }
@@ -3083,22 +3204,27 @@
         "ReservationStatus": {
             "properties": {
                 "id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "name": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 },
                 "description": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 },
                 "created_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "updated_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 }
@@ -3108,22 +3234,27 @@
         "SubType": {
             "properties": {
                 "id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "label": {
+                    "description": "",
                     "type": "integer",
                     "format": "string"
                 },
                 "description": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 },
                 "created_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "updated_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 }
@@ -3133,10 +3264,12 @@
         "TokenExpired": {
             "properties": {
                 "token": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 },
                 "error": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 }
@@ -3146,22 +3279,27 @@
         "Type": {
             "properties": {
                 "id": {
+                    "description": "",
                     "type": "integer",
                     "format": "int"
                 },
                 "label": {
+                    "description": "",
                     "type": "integer",
                     "format": "string"
                 },
                 "description": {
+                    "description": "",
                     "type": "string",
                     "format": "string"
                 },
                 "created_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 },
                 "updated_at": {
+                    "description": "",
                     "type": "string",
                     "format": "date"
                 }
