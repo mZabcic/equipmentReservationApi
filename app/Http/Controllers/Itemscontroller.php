@@ -629,9 +629,14 @@ if ($check == 0) {
      *     tags={"items"},
      *     @SWG\Response(
      *         response=200,
-     *         description="Item status" ,
+     *         description="Item free" ,
     *          
       *     ),
+     *       @SWG\Response(
+     *         response=411,
+     *         description=Item reserved today,
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
      *    @SWG\Response(
      *         response=500,
      *         description="Internal server error",
@@ -662,8 +667,22 @@ if ($check == 0) {
      * )
      */
     public function getstatus($id) {
+      $today = Carbon::now();
     $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with('reservations')->where('id', $id)->firstOrFail();
-    return response()->json($items, 200);
+    $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
+      if ($value->status_id != 2)
+         return false;
+      });
+       $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
+          if ($value->returned_date == null) {
+              $value->returned_date = '9999-12-31';
+          }
+         return DateTime::createFromFormat('Y-m-d', $today)  <= DateTime::createFromFormat('Y-m-d',$start_date) && DateTime::createFromFormat('Y-m-d', $today)  >= DateTime::createFromFormat('Y-m-d', $end_date);
+      });
+    if (count($items->reservations) == 0) {
+      return response()->json(200);
+    }  else 
+    return response()->json(411);
   }
 
 
