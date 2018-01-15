@@ -223,13 +223,13 @@ if (count($check) != 0) {
             try {
                $key = key($request->query());
                $value = $request->query($key);
-               $item = Reservation::with('items.item')->where($key, '=', $value )->get();
+               $item = Reservation::with('items.item')->with('extends')->where($key, '=', $value )->get();
                return response()->json($item, 200);
             } catch (Illuminate\Database\QueryException $e) {
                 return response()->json(['error'=>'Invalid serach data'], 501);
             }
       }
-      $reservations = Reservation::with('items.item')->with('user')->with('status')->where('status_id', '!=', 5)->get();
+      $reservations = Reservation::with('items.item')->with('user')->with('status')->with('extends')->where('status_id', '!=', 5)->get();
       return response()->json($reservations, 200);
     }
 
@@ -696,7 +696,7 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
      * )
      */
     public function byUser($id) {
-      $reservations = Reservation::with('items.item')->with('user')->with('status')->where('user_id', $id)->get();
+      $reservations = Reservation::with('items.item')->with('user')->with('status')->where('user_id', $id)->with('extends')->get();
       return response()->json($reservations, 200);
     }
 
@@ -756,7 +756,7 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
      * )
      */
     public function byItem($id) {
-        $reservations = Item::with('reservations.user')->with('reservations.status')->get();
+        $reservations = Item::with('reservations.user')->with('reservations.status')->with('extends')->get();
         return response()->json($reservations, 200);
       }
 

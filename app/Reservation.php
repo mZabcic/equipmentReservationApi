@@ -30,6 +30,11 @@ class Reservation extends Model
       return $this->hasMany('App\ReservationItem', 'reservation_id');
     }
 
+    public function extends()
+    {
+      return $this->hasMany('App\Extend', 'reservation_id');
+    }
+
     public function status()
     {
         return $this->belongsTo('App\ReservationStatus','status_id', 'id');
