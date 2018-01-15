@@ -854,7 +854,7 @@ $data['reservation_id'] = $request->input('reservation_id');
 $data['reason'] = $request->input('reason');
        try {
            $reservation = Reservation::where('id', $data['reservation_id'])->with('items')->firstOrfail();
-       } (NotFound $e) {
+       } catch (NotFound $e) {
         return response()->json(['error' => 'No reservation found'], 404);
     }
 if ($reservation->user_id != $me->id) {
