@@ -853,7 +853,7 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
 $data['reservation_id'] = $request->input('reservation_id');
 $data['reason'] = $request->input('reason');
        try {
-           $reservation = Reservation::where('id', $request->input('reservation_id',$data['reservation_id'])->with('items')->firstOrfail();
+           $reservation = Reservation::where('id', $data['reservation_id'])->with('items')->firstOrfail();
        } (NotFound $e) {
         return response()->json(['error' => 'No reservation found'], 404);
     }
