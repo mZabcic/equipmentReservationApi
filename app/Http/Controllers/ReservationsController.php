@@ -897,7 +897,7 @@ if (count($check) != 0) {
  $extend = new Extend;
  $extend->user_id = $me->id;
  $extend->reservation_id = $reservation->id;
- $extend->return_date = $data['new_return_date'];
+ $extend->new_return_date = $data['new_return_date'];
  $extend->reason = $data['reason'];
  $extend->status = "Zatraženo produživanje";
  $extend->save();
