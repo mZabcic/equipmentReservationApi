@@ -493,7 +493,7 @@ if ($check == 0) {
      * )
      */
     public function edit(Request $request) {
-      if ($request->input('Item') == null)
+      if ($request->input('item') == null)
       return response()->json([
     'error' => 'Item is required'
   ], 400);
