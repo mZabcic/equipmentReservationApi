@@ -44,6 +44,7 @@ Route::group([
         
         ], function ($router) {
             Route::get('/', 'ItemsController@getAll');
+            Route::get('/status/{id}', 'ItemsController@getstatus');
             Route::group([
                 
                     'middleware' => 'jwt',
