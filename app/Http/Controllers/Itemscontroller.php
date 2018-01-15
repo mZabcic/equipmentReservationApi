@@ -95,7 +95,7 @@ class ItemsController extends Controller
             }
             }
       $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->get();
-      $items->free = this->checkStatus($items);
+      $items->free = $this->checkStatus($items);
       return response()->json($items, 200);
     }
 
