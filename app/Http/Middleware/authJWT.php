@@ -33,6 +33,9 @@ class authJWT
                 return response()->json(['error'=>'Something is wrong'], 500);
             }
         }
+        if ($user->active == false ) {
+            return response()->json(['error'=>'User is not activated'], 415);
+        }
         return $next($request);
     }
 }

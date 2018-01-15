@@ -21,7 +21,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password', 'role_id'
+        'first_name', 'last_name', 'email', 'password', 'role_id', 'active'
     ];
 
     /**
@@ -81,6 +81,11 @@ class User extends Authenticatable implements JWTSubject
      */
     private $role_id;
 
+     /**
+     * @SWG\Property(format="boolean")
+     * @var boolean
+     */
+    private $active;
       /**
    * @SWG\Property(format="date")
    * @var date

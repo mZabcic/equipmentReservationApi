@@ -144,15 +144,30 @@ class UserController extends Controller
         'last_name' =>  $data['surname'],
         'password' => bcrypt($data['password']),
          'email' => $data['email'],
-         'role_id' => 1   
+         'role_id' => 2,
+         'active' => false  
     ]);
     $user->save();
     
     
      } else {
+        $check = User::where('email',$data['email'])->firstOrFail();
+        if ($check.active == false) {
+            $check->delete();
+            $user = User::create([
+                'first_name' => $data['name'],
+                'last_name' =>  $data['surname'],
+                'password' => bcrypt($data['password']),
+                 'email' => $data['email'],
+                 'role_id' => 2,
+                 'active' => false  
+            ]);
+            $user->save();
+        } else {
             return response()->json([
          'error' => 'User with that e-mail address already exists'
      ], 409);
+    }
      }
  }
 
@@ -205,7 +220,12 @@ class UserController extends Controller
      *     ),
      *     @SWG\Response(
      *         response=404,
-     *         description="User doesn't exist'",
+     *         description="User doesn't exist",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     * @SWG\Response(
+     *         response=415,
+     *         description="User is not activated",
      *         @SWG\Schema(ref="#/definitions/CustomError")
      *     ),
 *
@@ -229,7 +249,11 @@ class UserController extends Controller
     } catch(NotFound $e) {
         return response()->json(['error' => 'User does not exist'], 404);
     }
-   
+   if ($user->active == false ) {
+    return response()->json([
+        'error' => 'User is not activated'
+    ], 415);
+   }
     if (Hash::check($data['password'],  $user->password))
 {
 
@@ -521,7 +545,8 @@ return response()->json(['error' => 'Wrong password'], 401);
     } catch (NotFound $e) {
         return response()->json(['error' => 'No user found'], 404);
     }
-        $user->delete();
+        $user->active = false;
+        $user->save();
     return response()->json();
     
     }
@@ -601,6 +626,7 @@ return response()->json(['error' => 'Wrong password'], 401);
     $acc->first_name = $account[0]->first_name != null ? $account[0]->first_name : $acc->first_name;
     $acc->last_name = $account[0]->last_name!= null ? $account[0]->last_name : $acc->last_name;
     $acc->email = $account[0]->email != null ? $account[0]->email : $acc->email;
+    $acc->active = $account[0]->active != null ? $account[0]->active : $acc->active;
     $acc->updated_at = Carbon::now();
     $acc->save();
    

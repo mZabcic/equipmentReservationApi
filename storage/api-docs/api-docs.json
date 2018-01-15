@@ -3010,7 +3010,13 @@
                         }
                     },
                     "404": {
-                        "description": "User doesn't exist'",
+                        "description": "User doesn't exist",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "415": {
+                        "description": "User is not activated",
                         "schema": {
                             "$ref": "#/definitions/CustomError"
                         }
@@ -4018,6 +4024,10 @@
                 "role_id": {
                     "type": "integer",
                     "format": "int"
+                },
+                "active": {
+                    "type": "boolean",
+                    "format": "boolean"
                 },
                 "created_at": {
                     "type": "string",
