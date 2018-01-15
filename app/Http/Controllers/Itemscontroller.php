@@ -95,6 +95,7 @@ class ItemsController extends Controller
             }
             }
       $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->get();
+      $items->free = this.checkStatus($items);
       return response()->json($items, 200);
     }
 
@@ -680,6 +681,24 @@ if ($check == 0) {
     return response()->json(false, 200);
   }
 
+ private function checkStatus($items) {
+  $today = Carbon::now();
+  $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with('reservations')->where('id', $id)->firstOrFail();
+  $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
+    if ($value->status_id != 2)
+       return false;
+    });
+     $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
+        if ($value->returned_date == null) {
+            $value->returned_date = '9999-12-31';
+        }
+       return DateTime::createFromFormat('Y-m-d', $today)  <= DateTime::createFromFormat('Y-m-d',$start_date) && DateTime::createFromFormat('Y-m-d', $today)  >= DateTime::createFromFormat('Y-m-d', $end_date);
+    });
+  if (count($items->reservations) == 0) {
+    return true;
+  }  else 
+  return false;
+ }
 
   
 
