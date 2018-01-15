@@ -629,7 +629,7 @@ if ($check == 0) {
      *     tags={"items"},
      *     @SWG\Response(
      *         response=200,
-     *         description="Item free" ,
+     *         description="Item free"
     *          
       *     ),
      *       @SWG\Response(
@@ -666,7 +666,7 @@ if ($check == 0) {
       *   
      * )
      */
-    public function getstatus($id) {
+    public function getStatus($id) {
       $today = Carbon::now();
     $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with('reservations')->where('id', $id)->firstOrFail();
     $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
