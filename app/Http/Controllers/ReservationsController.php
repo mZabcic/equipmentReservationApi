@@ -616,7 +616,6 @@ if (count($check) != 0) {
 
      
 private function checkIfItemsTaken($start_date, $end_date, $items) {
-    return response()->json($items, 400);
       $returnData = [];
       foreach ($items as $item) {
          $data = Item::with('reservations')->where('id', $item)->firstOrFail();
