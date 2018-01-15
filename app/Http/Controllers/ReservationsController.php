@@ -630,7 +630,7 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
      * @return \Illuminate\Http\JsonResponse
      *
      * @SWG\Get(
-     *     path="reservations/user/:id",
+     *     path="reservations/user/{id}",
      *     description="Dohvati sve items ili filtrirane od nekog korisnika",
      *     operationId="api.reservations.users",
      *     produces={"application/json"},
