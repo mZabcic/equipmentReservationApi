@@ -95,7 +95,7 @@ class ItemsController extends Controller
             }
             }
       $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->get();
-      $items->free = this.checkStatus($items);
+      $items->free = this->checkStatus($items);
       return response()->json($items, 200);
     }
 
@@ -683,7 +683,6 @@ if ($check == 0) {
 
  private function checkStatus($items) {
   $today = Carbon::now();
-  $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with('reservations')->where('id', $id)->firstOrFail();
   $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
     if ($value->status_id != 2)
        return false;
