@@ -740,7 +740,7 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
      * )
      */
     public function byItem($id) {
-        $reservations = Item::with('reservations')->get();
+        $reservations = Item::with('reservations.user')->get();
         return response()->json($reservations, 200);
       }
 
