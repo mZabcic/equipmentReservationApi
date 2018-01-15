@@ -152,7 +152,7 @@ class UserController extends Controller
     
      } else {
         $check = User::where('email',$data['email'])->firstOrFail();
-        if ($check.active == false) {
+        if ($check->active == false) {
             $check->delete();
             $user = User::create([
                 'first_name' => $data['name'],
