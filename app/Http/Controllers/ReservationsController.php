@@ -1223,6 +1223,99 @@ $extend->save();
     }
 
 
+     /**
+     * Obriši rezervaciju
+     * @param number $id
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Delete(
+     *     path="admin/reservations/delete/{id}",
+     *     description="Obriši rezervaciju sa danim ID-om",
+     *     operationId="api.admin.reservations.delete",
+     *     produces={"application/json"},
+     *     tags={"admin"},
+     *     schemes={"http"},
+     * *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id rezervacije",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Rezervacija je obrisana"   
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="No data found",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *    @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+      *    @SWG\Response(
+     *         response=400,
+     *         description="Invalid data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="No admin rights",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+     * ,
+     *      @SWG\Response(
+     *         response=407,
+     *         description="Item has reservations, you cannot delete it",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+*
+      *   
+     * )
+     */
+    public function deleteAdmin($id) {
+        try {
+        $reservation = Reservation::where('id', '=', $id)->firstOrFail();
+    } catch (NotFound $e) {
+        return response()->json(['error' => 'No item found'], 404);
+    }
+    $resItem = ReservationItem::where('reservation_id', $reservation->id)->get();
+    foreach ($resItem as $item) {
+        $item->delete();
+    }
+    $reservation->delete();
+    return response()->json();
+    
+    }
+
+
 
 
 

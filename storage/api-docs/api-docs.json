@@ -1603,6 +1603,12 @@
                         "schema": {
                             "$ref": "#/definitions/CustomError"
                         }
+                    },
+                    "407": {
+                        "description": "Item has reservations, you cannot delete it",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
                     }
                 },
                 "schemes": [
@@ -2872,6 +2878,97 @@
                     },
                     "403": {
                         "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    }
+                },
+                "schemes": [
+                    "http"
+                ]
+            }
+        },
+        "admin/reservations/delete/{id}": {
+            "delete": {
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Obri\u0161i rezervaciju",
+                "description": "Obri\u0161i rezervaciju sa danim ID-om",
+                "operationId": "api.admin.reservations.delete",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "description": "JWT token",
+                        "required": true,
+                        "type": "string",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id rezervacije",
+                        "required": true,
+                        "type": "integer",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rezervacija je obrisana"
+                    },
+                    "404": {
+                        "description": "No data found",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "401": {
+                        "description": "Token invalid",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "402": {
+                        "description": "No token recived",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "410": {
+                        "description": "Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/TokenExpired"
+                        }
+                    },
+                    "403": {
+                        "description": "No admin rights",
+                        "schema": {
+                            "$ref": "#/definitions/CustomError"
+                        }
+                    },
+                    "407": {
+                        "description": "Item has reservations, you cannot delete it",
                         "schema": {
                             "$ref": "#/definitions/CustomError"
                         }

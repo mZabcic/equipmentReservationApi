@@ -123,7 +123,7 @@ Route::group([
     Route::get('/extends', 'ReservationsController@allExtends');
     Route::get('/', 'ReservationsController@all');
     Route::post('/request', 'ReservationsController@reservationRequest');
-    Route::post('/delete/{id}', 'ReservationsController@delete');
+    Route::delete('/delete/{id}', 'ReservationsController@deleteAdmin');
 });
         
 });

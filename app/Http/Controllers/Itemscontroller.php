@@ -609,6 +609,12 @@ if ($check == 0) {
      *         description="No admin rights",
      *         @SWG\Schema(ref="#/definitions/CustomError")
      *     )
+     * ,
+     *      @SWG\Response(
+     *         response=407,
+     *         description="Item has reservations, you cannot delete it",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
 *
       *   
      * )
@@ -619,7 +625,12 @@ if ($check == 0) {
   } catch (NotFound $e) {
       return response()->json(['error' => 'No item found'], 404);
   }
+  $check = Item::with('reservations')->where('id', '=', $id)->count();
+  if ($count == 0) {
       $item->delete();
+  } else {
+    return response()->json(['error' => 'Item has reservations, you cannot delete it'], 407);
+  }
   return response()->json();
   
   }
