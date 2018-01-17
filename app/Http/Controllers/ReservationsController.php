@@ -1310,7 +1310,23 @@ $extend->save();
     foreach ($resItem as $item) {
         $item->delete();
     }
+    $extends = Extend::where('reservation_id', $reservation->id)->get();
+    foreach ($extends as $item) {
+        $item->delete();
+    }
     $reservation->delete();
+    return response()->json();
+    
+    }
+
+    public function deleteExtend($id) {
+        try {
+        $extend = Extend::where('id', '=', $id)->firstOrFail();
+    } catch (NotFound $e) {
+        return response()->json(['error' => 'No item found'], 404);
+    }
+    
+    $extend->delete();
     return response()->json();
     
     }

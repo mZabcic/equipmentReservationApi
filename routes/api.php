@@ -124,6 +124,7 @@ Route::group([
     Route::get('/', 'ReservationsController@all');
     Route::post('/request', 'ReservationsController@reservationRequest');
     Route::delete('/delete/{id}', 'ReservationsController@deleteAdmin');
+    Route::delete('/extend/delete/{id}', 'ReservationsController@deleteExtend');
 });
         
 });
