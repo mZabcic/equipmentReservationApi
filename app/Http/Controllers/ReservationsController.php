@@ -12,7 +12,7 @@ use App\SubType;
 use App\Type;
 use App\ReservationStatus;
 use App\Reservation;
-use App\ReservationItems;
+use App\ReservationItem;
 use App\Extend;
 use DB;
 use Auth;
@@ -1306,7 +1306,7 @@ $extend->save();
     } catch (NotFound $e) {
         return response()->json(['error' => 'No item found'], 404);
     }
-    $resItem = ReservationItems::where('reservation_id', $reservation->id)->get();
+    $resItem = ReservationItem::where('reservation_id', $reservation->id)->get();
     foreach ($resItem as $item) {
         $item->delete();
     }
