@@ -13,6 +13,10 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException as TokenExpired;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException as TokenInvalid;
 use Tymon\JWTAuth\Exceptions\JWTException as TokenException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException as TokenBlacklisted;
+use App\ReservationStatus;
+use App\Reservation;
+use App\ReservationItem;
+use App\Extend;
 use Exception;
 use Hash;
 use Carbon\Carbon;
@@ -153,7 +157,9 @@ class UserController extends Controller
      } else {
         $check = User::where('email',$data['email'])->firstOrFail();
         if ($check->active == false) {
+            $this->deleteReservations($check->id);
             $check->delete();
+
             $user = User::create([
                 'first_name' => $data['name'],
                 'last_name' =>  $data['surname'],
@@ -473,6 +479,7 @@ return response()->json(['error' => 'Wrong password'], 401);
     } catch (NotFound $e) {
         return response()->json(['error' => 'No user found'], 404);
     }
+    $this->deleteReservations($user->id);
         $user->delete();
     return response()->json();
     
@@ -808,6 +815,27 @@ return response()->json(['error' => 'Wrong password'], 401);
     public function guard()
     {
         return Auth::guard();
+    }
+
+
+    private function deleteReservations($id) {
+    $reservations = Reservation::where('user_id', $id)->get();
+    foreach ($reservations as $i) {
+
+        
+        $reservation = Reservation::where('id', '=', $i->id)->firstOrFail();
+   
+    $resItem = ReservationItem::where('reservation_id', $reservation->id)->get();
+    foreach ($resItem as $item) {
+        $item->delete();
+    }
+    $extends = Extend::where('reservation_id', $reservation->id)->get();
+    foreach ($extends as $item) {
+        $item->delete();
+    }
+    $reservation->delete();
+}
+
     }
 
 
