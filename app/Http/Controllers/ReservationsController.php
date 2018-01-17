@@ -1306,7 +1306,7 @@ $extend->save();
     } catch (NotFound $e) {
         return response()->json(['error' => 'No item found'], 404);
     }
-    $resItem = ReservationItem::where('reservation_id', $reservation->id)->get();
+    $resItem = ReservationItems::where('reservation_id', $reservation->id)->get();
     foreach ($resItem as $item) {
         $item->delete();
     }
