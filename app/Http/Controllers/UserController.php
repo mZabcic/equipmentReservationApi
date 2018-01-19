@@ -796,6 +796,7 @@ return response()->json(['error' => 'Wrong password'], 401);
         } catch (Exception $e) {
   
         }
+        dd($user[0]->id);
         try {
     $acc = User::where("id", $user[0]->id)->firstOrFail();
         } catch (NotFound $e) {
