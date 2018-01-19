@@ -633,7 +633,6 @@ return response()->json(['error' => 'Wrong password'], 401);
     $acc->first_name = $account[0]->first_name != null ? $account[0]->first_name : $acc->first_name;
     $acc->last_name = $account[0]->last_name!= null ? $account[0]->last_name : $acc->last_name;
     $acc->email = $account[0]->email != null ? $account[0]->email : $acc->email;
-    $acc->active = $account[0]->active != null ? $account[0]->active : $acc->active;
     $acc->updated_at = Carbon::now();
     $acc->save();
    
