@@ -813,7 +813,6 @@ return response()->json(['error' => 'Wrong password'], 401);
     $acc->role_id = $user[0]->role_id != null ? $user[0]->role_id : $acc->role_id;
     $acc->active = $user[0]->active; //$user[0]->active != null ? $user[0]->active : $acc->active;
     $acc->updated_at = Carbon::now();
-    dd($acc->active);
     $acc->save();
    
     
