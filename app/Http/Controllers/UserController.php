@@ -778,6 +778,7 @@ return response()->json(['error' => 'Wrong password'], 401);
   'error' => 'User is required'
 ], 400);
     $user = User::hydrate([json_decode($request->input('user'))]);
+    dd($user);
     try {
       $user_id = $user[0]->id;
     } catch (Exception $e) {
