@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@admin.admin',
             'first_name' => 'admin',
             'last_name' => 'admin',
-            'password' => 'password',
+            'password' => bcrypt('password'),
             'role_id' => 1
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
