@@ -796,7 +796,14 @@ return response()->json(['error' => 'Wrong password'], 401);
         } catch (Exception $e) {
   
         }
-    $acc = User::where("id", "=", $user[0]->id)->first();
+        try {
+    $acc = User::where("id", $user[0]->id)->firstOrFail();
+        } catch (NotFound $e) {
+            return response()->json([
+                'error' => 'User doesnt exist'
+            ], 404);
+            } 
+        
     $acc->first_name = $user[0]->first_name != null ? $user[0]->first_name : $acc->first_name;
     $acc->last_name = $user[0]->last_name!= null ? $user[0]->last_name : $acc->last_name;
     $acc->email = $user[0]->email != null ? $user[0]->email : $acc->email;
