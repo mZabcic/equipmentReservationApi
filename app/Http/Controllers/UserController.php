@@ -777,6 +777,7 @@ return response()->json(['error' => 'Wrong password'], 401);
     return response()->json([
   'error' => 'User is required'
 ], 400);
+dd($request->input('user'));
     $user = User::hydrate([json_decode($request->input('user'))]);
     try {
       $user_id = $user[0]->id;
@@ -796,7 +797,7 @@ return response()->json(['error' => 'Wrong password'], 401);
         } catch (Exception $e) {
   
         }
-        dd($user[0]->id);
+       
         try {
     $acc = User::where("id", $user[0]->id)->firstOrFail();
         } catch (NotFound $e) {
