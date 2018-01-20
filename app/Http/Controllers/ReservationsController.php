@@ -352,7 +352,7 @@ if (count($check) != 0) {
      * @param number $id
      * @return \Illuminate\Http\JsonResponse
      *
-     * @SWG\Post(
+     * @SWG\Delete(
      *     path="reservations/delete/{id}",
      *     description="Otkazuje rezervaciju sa danim ID-om",
      *     operationId="api.reservations.delete",
@@ -732,17 +732,13 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
       foreach ($items as $item) {
          $data = Item::with('reservations')->where('id', $item)->firstOrFail();
        //  dd($data);
-       $data = $data->filter(function ($value, $key) {
-        if ($value->working == false)
-           return false;
-        });
-        
         $data->reservations = $data->reservations->filter(function ($value, $key) use ($start_date, $end_date) {
         if ($value->status_id != 2)
            return false;
         });
-        
-     });
+           if ($value->status_id != 2)
+           return false;
+        });
          $test = $data->reservations->filter(function ($value, $key) use ($start_date, $end_date) {
             if ($value->returned_date == null) {
                 $value->returned_date = '9999-12-31';
