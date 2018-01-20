@@ -732,12 +732,16 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
       foreach ($items as $item) {
          $data = Item::with('reservations')->where('id', $item)->firstOrFail();
        //  dd($data);
+       $data = $data->filter(function ($value, $key) {
+        if ($value->working == false)
+           return false;
+        });
+        
         $data->reservations = $data->reservations->filter(function ($value, $key) use ($start_date, $end_date) {
         if ($value->status_id != 2)
            return false;
         });
-        if ($value->working == false)
-        return false;
+        
      });
          $test = $data->reservations->filter(function ($value, $key) use ($start_date, $end_date) {
             if ($value->returned_date == null) {
