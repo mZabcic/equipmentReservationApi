@@ -352,7 +352,7 @@ if (count($check) != 0) {
      * @param number $id
      * @return \Illuminate\Http\JsonResponse
      *
-     * @SWG\Delete(
+     * @SWG\Post(
      *     path="reservations/delete/{id}",
      *     description="Otkazuje rezervaciju sa danim ID-om",
      *     operationId="api.reservations.delete",
