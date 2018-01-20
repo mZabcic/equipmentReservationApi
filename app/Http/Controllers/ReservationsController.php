@@ -736,9 +736,7 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
         if ($value->status_id != 2)
            return false;
         });
-           if ($value->status_id != 2)
-           return false;
-        });
+           
          $test = $data->reservations->filter(function ($value, $key) use ($start_date, $end_date) {
             if ($value->returned_date == null) {
                 $value->returned_date = '9999-12-31';
