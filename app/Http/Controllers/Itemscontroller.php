@@ -682,9 +682,8 @@ if ($check == 0) {
      */
     public function getStatus($id) {
       $today = Carbon::now();
-      dd($today);
     $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with('reservations')->where('id', $id)->firstOrFail();
-   
+   dd($items->reservations[0]->start_date);
     $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
       if ($value->status_id != 2)
          return false;
