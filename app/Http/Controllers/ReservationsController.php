@@ -421,10 +421,11 @@ if (count($check) != 0) {
     public function delete($id) {
         $me = $this->guard()->user();
         try {
-        $resevation = Reservation::where('id', '=', $id)->firstOrFail();
+        $resevation = Reservation::where('id', $id)->firstOrFail();
     } catch (NotFound $e) {
         return response()->json(['error' => 'No reservation found'], 404);
     }
+    dd($resevation);
         if ($me->role_id == 1 || $reservation->user_id == $me->id) {
            $resevation->status_id = 5;
            $resevation->save();
@@ -733,8 +734,8 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
          $data = Item::with('reservations')->where('id', $item)->firstOrFail();
       
         $data->reservations = $data->reservations->filter(function ($value, $key) use ($start_date, $end_date) {
-        if ($value->status_id != 2)
-           return false;
+      
+            return $value->status_id == 2;
         });
            
          $test = $data->reservations->filter(function ($value, $key) use ($start_date, $end_date) {
