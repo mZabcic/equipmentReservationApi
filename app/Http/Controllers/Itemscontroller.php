@@ -682,6 +682,7 @@ if ($check == 0) {
      */
     public function getStatus($id) {
       $today = Carbon::now();
+      dd($today);
     $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with('reservations')->where('id', $id)->firstOrFail();
    
     $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
