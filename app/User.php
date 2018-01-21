@@ -82,8 +82,8 @@ class User extends Authenticatable implements JWTSubject
     private $role_id;
 
      /**
-     * @SWG\Property(format="boolean")
-     * @var boolean
+     * @SWG\Property(format="int")
+     * @var int
      */
     private $active;
       /**
