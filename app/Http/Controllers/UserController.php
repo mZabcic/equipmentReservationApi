@@ -923,7 +923,7 @@ return response()->json(['error' => 'Wrong password'], 401);
      */
    public function editActive($id) {
     try {
-        $users = User::where('id', $id)->firstOrFail();
+        $user = User::where('id', $id)->firstOrFail();
     } catch(NotFound $e) {
         return response()->json(['error' => 'User does not exist'], 404);
     }
