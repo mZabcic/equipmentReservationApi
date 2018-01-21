@@ -691,10 +691,8 @@ if ($check == 0) {
       });
      
        $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
-          if ($value->returned_date == null) {
-              $value->returned_date = '9999-12-31';
-          }
-         return $today  >= DateTime::createFromFormat('Y-m-d', $value->start_date) && $today  <= DateTime::createFromFormat('Y-m-d', $value->returned_date);
+         
+         return $today  <= DateTime::createFromFormat('Y-m-d', $value->start_date); 
       });
    
     if (count($items->reservations) == 0) {
