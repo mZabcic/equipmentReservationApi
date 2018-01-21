@@ -687,7 +687,7 @@ if ($check == 0) {
    
     $items->reservations->filter(function ($value, $key) use ($today) {
      
-         return $value->status_id == 2;
+         return $value->status_id != 2;
       
       });
       dd($items->reservations);
