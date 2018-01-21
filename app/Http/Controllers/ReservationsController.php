@@ -425,8 +425,7 @@ if (count($check) != 0) {
     } catch (NotFound $e) {
         return response()->json(['error' => 'No reservation found'], 404);
     }
-    dd($resevation);
-        if ($me->role_id == 1 || $reservation->user_id == $me->id) {
+        if ($me->role_id == 1 || $resevation->user_id == $me->id) {
            $resevation->status_id = 5;
            $resevation->save();
            return response()->json();
