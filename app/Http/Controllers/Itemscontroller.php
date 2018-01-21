@@ -683,7 +683,7 @@ if ($check == 0) {
      */
     public function getStatus($id) {
       $today = new DateTime();
-    $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with('reservations')->where('id', $id)->where('status_id', 2)->firstOrFail();
+    $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with('reservations')->where('id', $id)->where('reservations.status_id', 2)->firstOrFail();
    
     dd($items);
    
