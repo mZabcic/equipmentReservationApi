@@ -811,7 +811,6 @@ return response()->json(['error' => 'Wrong password'], 401);
     $acc->last_name = $user[0]->last_name!= null ? $user[0]->last_name : $acc->last_name;
     $acc->email = $user[0]->email != null ? $user[0]->email : $acc->email;
     $acc->role_id = $user[0]->role_id != null ? $user[0]->role_id : $acc->role_id;
-    $acc->active = $user[0]->active != null ? $user[0]->active : $acc->active;
     $acc->updated_at = Carbon::now();
     $acc->save();
    
@@ -846,6 +845,93 @@ return response()->json(['error' => 'Wrong password'], 401);
 }
 
     }
+
+
+
+
+
+
+
+        /**
+     * Promjeni status usera
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @SWG\Put(
+     *     path="admin/users/edit/status/{id}",
+     *     description="Promjeni polje active",
+     *     operationId="api.admin.users.edit.active",
+     *     produces={"application/json"},
+     *     tags={"admin"},
+     *     schemes={"http"},
+     *     @SWG\Parameter(
+	 * 			name="authorization",
+	 * 		    in="header",
+	 * 			required=true,
+	 * 			type="string",
+	 * 			description="JWT token",
+      *         @SWG\Items(type="string")
+	 * 		),    
+     *       @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Id korisnika",
+     *         required=true,
+     *         type="integer",
+     *         @SWG\Items(type="integer")
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Edited user",
+     *        @SWG\Schema(ref="#/definitions/User")
+     *     ),
+     *     @SWG\Response(
+     *         response=409,
+     *         description="User with that e-mail address already exists",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Token invalid",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=402,
+     *         description="No token recived",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=410,
+     *         description="Token expired",
+     *         @SWG\Schema(ref="#/definitions/TokenExpired")
+     *     ),
+     *       @SWG\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *      @SWG\Response(
+     *         response=403,
+     *         description="No admin rights",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid form data",
+     *         @SWG\Schema(ref="#/definitions/CustomError")
+     *     )
+     * )
+     */
+   public function editActive($id) {
+    try {
+        $users = User::where('id', $id)->firstOrFail();
+    } catch(NotFound $e) {
+        return response()->json(['error' => 'User does not exist'], 404);
+    }
+    $user->active = $user->active == 0 ? 1 : 0;
+    $user->save();
+        return response()->json($user, 200);
+}
+
 
 
   

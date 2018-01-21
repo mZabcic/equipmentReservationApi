@@ -108,6 +108,7 @@ Route::group([
     Route::get('/current', 'UserController@currentUser');
     Route::get('/', 'UserController@getUsers');
     Route::get('/{id}', 'UserController@user');
+    Route::put('/edit/status/{id}', 'UserController@editActive');
     Route::delete('/delete', 'UserController@deleteMe');
 });
 
