@@ -224,7 +224,7 @@ if (count($check) != 0) {
             try {
                $key = key($request->query());
                $value = $request->query($key);
-               $item = Reservation::with('items.item')->with('extends')->where($key, '=', $value )->get();
+               $item = Reservation::with('items.item')->with('user')->with('status')->with('extends')->where('status_id', '!=', 5)->where($key, '=', $value )->get();
                return response()->json($item, 200);
             } catch (Illuminate\Database\QueryException $e) {
                 return response()->json(['error'=>'Invalid serach data'], 501);
