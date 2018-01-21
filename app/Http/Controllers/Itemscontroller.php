@@ -690,7 +690,6 @@ if ($check == 0) {
          return $value->status_id == 2;
       
       });
-      dd($items->reservations);
      
        $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
           if ($value->returned_date == null) {
