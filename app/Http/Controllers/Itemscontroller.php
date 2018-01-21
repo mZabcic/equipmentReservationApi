@@ -683,16 +683,17 @@ if ($check == 0) {
     public function getStatus($id) {
       $today = Carbon::now();
     $items = Item::with("kit")->with("subtype")->with("type")->with("deviceType")->with('reservations')->where('id', $id)->firstOrFail();
-    dd($items->reservations);
+   
     $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
       if ($value->status_id != 2)
          return false;
       });
+
        $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
           if ($value->returned_date == null) {
               $value->returned_date = '9999-12-31';
           }
-         return DateTime::createFromFormat('Y-m-d', $today)  <= DateTime::createFromFormat('Y-m-d',$start_date) && DateTime::createFromFormat('Y-m-d', $today)  >= DateTime::createFromFormat('Y-m-d', $end_date);
+         return DateTime::createFromFormat('Y-m-d', $today)  >= DateTime::createFromFormat('Y-m-d',$start_date) && DateTime::createFromFormat('Y-m-d', $today)  <= DateTime::createFromFormat('Y-m-d', $end_date);
       });
     if (count($items->reservations) == 0) {
       return response()->json(true, 200);
