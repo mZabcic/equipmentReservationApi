@@ -689,11 +689,7 @@ if ($check == 0) {
       if ($value->status_id != 2)
          return false;
       });
-     
-       $items->reservations = $items->reservations->filter(function ($value, $key) use ($today) {
-         
-         return $today  <= DateTime::createFromFormat('Y-m-d', $value->start_date); 
-      });
+     dd($items->reservations);
    
     if (count($items->reservations) == 0) {
       return response()->json(true, 200);
