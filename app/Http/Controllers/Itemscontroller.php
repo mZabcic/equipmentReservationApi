@@ -693,7 +693,7 @@ if ($check == 0) {
           if ($value->returned_date == null) {
               $value->returned_date = '9999-12-31';
           }
-         return DateTime::createFromFormat('Y-m-d', $today)  <= DateTime::createFromFormat('Y-m-d',$start_date) && DateTime::createFromFormat('Y-m-d', $today)  >= DateTime::createFromFormat('Y-m-d', $end_date);
+         return  $today  <= DateTime::createFromFormat('Y-m-d',$value->start_date) && $today  >= DateTime::createFromFormat('Y-m-d', $value->returned_date);
       });
       dd( $items->reservations);
     if (count($items->reservations) == 0) {
