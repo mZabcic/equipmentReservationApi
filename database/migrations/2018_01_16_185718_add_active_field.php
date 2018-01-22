@@ -14,7 +14,7 @@ class AddActiveField extends Migration
     public function up()
     {
         Schema::table('reservations', function($table) {
-            $table->integer('status_by_id')->default("System");;
+            $table->integer('status_by_id');
         });
     }
 
