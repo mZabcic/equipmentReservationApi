@@ -150,6 +150,7 @@ if (count($check) != 0) {
  $reservation->return_date = $data['return_date'];
  $reservation->remark = $data['remark'];
  $reservation->status_id = 1;
+ $reservation->status_by_id = $me->id;
  $reservation->save();
 
  foreach($data['item_id'] as $item) {
@@ -224,13 +225,13 @@ if (count($check) != 0) {
             try {
                $key = key($request->query());
                $value = $request->query($key);
-               $item = Reservation::with('items.item')->with('user')->with('status')->with('extends')->where('status_id', '!=', 5)->where($key, '=', $value )->get();
+               $item = Reservation::with('items.item')->with('user')->with('status')->with('extends')->with('status_creator')->where('status_id', '!=', 5)->where($key, '=', $value )->get();
                return response()->json($item, 200);
             } catch (Illuminate\Database\QueryException $e) {
                 return response()->json(['error'=>'Invalid serach data'], 501);
             }
       }
-      $reservations = Reservation::with('items.item')->with('user')->with('status')->with('extends')->where('status_id', '!=', 5)->get();
+      $reservations = Reservation::with('items.item')->with('user')->with('status')->with('extends')->with('status_creator')->where('status_id', '!=', 5)->get();
       return response()->json($reservations, 200);
     }
 
@@ -427,6 +428,7 @@ if (count($check) != 0) {
     }
         if ($me->role_id == 1 || $resevation->user_id == $me->id) {
            $resevation->status_id = 5;
+           $reservation->status_by_id = $me->id;
            $resevation->save();
            return response()->json();
         } else {
@@ -518,6 +520,8 @@ if (count($check) != 0) {
         return response()->json(['error' => 'No reservation found'], 404);
     }
            $resevation->status_id = 2;
+           $me = $this->guard()->user();
+           $reservation->status_by_id = $me->id;
            $resevation->save();
            return response()->json();
        
@@ -607,6 +611,8 @@ if (count($check) != 0) {
         return response()->json(['error' => 'No reservation found'], 404);
     }
            $resevation->status_id = 4;
+           $me = $this->guard()->user();
+           $reservation->status_by_id = $me->id;
            $resevation->save();
            return response()->json();
        
@@ -710,6 +716,8 @@ if (count($check) != 0) {
     }
            $resevation->status_id = 3;
            $resevation->remark = $request->input('remark');
+           $me = $this->guard()->user();
+           $reservation->status_by_id = $me->id;
            $resevation->save();
            return response()->json();
        
@@ -809,7 +817,7 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
      * )
      */
     public function byUser($id) {
-      $reservations = Reservation::with('items.item')->with('user')->with('status')->where('user_id', $id)->with('extends')->get();
+      $reservations = Reservation::with('items.item')->with('user')->with('status')->where('user_id', $id)->with('status_creator')->with('extends')->get();
       return response()->json($reservations, 200);
     }
 
@@ -869,7 +877,7 @@ private function checkIfItemsTaken($start_date, $end_date, $items) {
      * )
      */
     public function byItem($id) {
-        $reservations = Item::with('reservations.user')->with('reservations.status')->with('reservations.extends')->where('id', $id)->get();
+        $reservations = Item::with('reservations.user')->with('reservations.status')->with('reservations.extends')->with('status_creator')->where('id', $id)->get();
         return response()->json($reservations, 200);
       }
 

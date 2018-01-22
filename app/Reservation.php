@@ -40,6 +40,11 @@ class Reservation extends Model
         return $this->belongsTo('App\ReservationStatus','status_id', 'id');
     }
 
+    public function status_creator()
+    {
+      return $this->belongsTo('App\User','status_by_id', 'id');
+    }
+
     
 
 
@@ -53,6 +58,11 @@ class Reservation extends Model
    * @var int
    */
  private $user_id;
+ /**
+   * @SWG\Property(format="string")
+   * @var int
+   */
+  private $status_by_id;
   /**
    * @SWG\Property(format="date")
    * @var date
@@ -100,6 +110,11 @@ class Reservation extends Model
    * @var User
    */
   private $user;
+      /**
+   * @SWG\Property(format="User")
+   * @var User
+   */
+  private $status_by;
     /**
    * @SWG\Property(format="ReservationStatus")
    * @var ReservationStatus
