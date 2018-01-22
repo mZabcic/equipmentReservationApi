@@ -510,6 +510,7 @@ if (count($check) != 0) {
      * )
      */
     public function approve(Request $request) {
+        $me = $this->guard()->user();
         if ($request->input('id') == null)
         return response()->json([
       'error' => 'ID is required'
@@ -520,8 +521,8 @@ if (count($check) != 0) {
         return response()->json(['error' => 'No reservation found'], 404);
     }
            $resevation->status_id = 2;
-           $me = $this->guard()->user();
-           dd($me);
+        
+          
            $reservation->status_by_id = $me->id;
            $resevation->save();
            return response()->json();
