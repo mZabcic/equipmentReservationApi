@@ -17,7 +17,7 @@ class Reservation extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'return_date', 'returned_date', 'remark', 'status_id', 'start_date'
+        'user_id', 'return_date', 'returned_date', 'remark', 'status_id', 'start_date', 'status_by_id'
     ];
 
     public function user()
