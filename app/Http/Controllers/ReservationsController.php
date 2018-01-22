@@ -522,8 +522,8 @@ if (count($check) != 0) {
     }
            $resevation->status_id = 2;
         
-          dd($reservation->status_by_id);
-           $reservation->status_by_id = $me->id;
+     
+           $resevation->status_by_id = $me->id;
            $resevation->save();
            return response()->json();
        
