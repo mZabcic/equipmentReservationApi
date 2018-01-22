@@ -428,7 +428,7 @@ if (count($check) != 0) {
     }
         if ($me->role_id == 1 || $resevation->user_id == $me->id) {
            $resevation->status_id = 5;
-           $reservation->status_by_id = $me->id;
+           $resevation->status_by_id = $me->id;
            $resevation->save();
            return response()->json();
         } else {
@@ -614,7 +614,7 @@ if (count($check) != 0) {
     }
            $resevation->status_id = 4;
            $me = $this->guard()->user();
-           $reservation->status_by_id = $me->id;
+           $resevation->status_by_id = $me->id;
            $resevation->save();
            return response()->json();
        
@@ -719,7 +719,7 @@ if (count($check) != 0) {
            $resevation->status_id = 3;
            $resevation->remark = $request->input('remark');
            $me = $this->guard()->user();
-           $reservation->status_by_id = $me->id;
+           $resevation->status_by_id = $me->id;
            $resevation->save();
            return response()->json();
        
